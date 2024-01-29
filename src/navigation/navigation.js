@@ -23,8 +23,8 @@ const Drawer = createDrawerNavigator();
 const DrawerScreen = ({ navigation }) => {
 
     const routes = [
-        { name: ROUTES.ADD_USER, icon: 'person-sharp', component: AddUser , title:'Add User' },
-        { name: ROUTES.ADD_USER_DETAIL, icon: 'stats-chart', iconBorder: true, component: AddUserDetail , title:'Add User Detail'},
+        { name: ROUTES.ADD_USER_DETAIL, icon: 'stats-chart', iconBorder: true, component: AddUserDetail, title: 'Add User Detail' },
+        { name: ROUTES.ADD_USER, icon: 'person-sharp', component: AddUser, title: 'Add User' },
     ];
 
 
@@ -38,7 +38,7 @@ const DrawerScreen = ({ navigation }) => {
 
     useFocusEffect(focusEffectCallback);
 
-    const renderDrawerItem = ({ name, icon, borderTop, iconBorder, component ,title }) => (
+    const renderDrawerItem = ({ name, icon, borderTop, iconBorder, component, title }) => (
         <Drawer.Screen
             key={name}
             name={name}
@@ -48,7 +48,8 @@ const DrawerScreen = ({ navigation }) => {
                 drawerLabel: title,
                 drawerActiveTintColor: COLOR.blue,
                 drawerInactiveTintColor: COLOR.black,
-                headerShown: true
+                headerShown: true,
+                headerStyle:{backgroundColor:COLOR.blue}
             }}
         />
     );
@@ -59,8 +60,8 @@ const DrawerScreen = ({ navigation }) => {
             screenOptions={{
                 drawerStyle: { backgroundColor: COLOR.screenBg, width: wp(70) }
             }}
-            // drawerContent={(props) => <CustomDrawer {...props} drawerType="slide"
-            // />}
+        // drawerContent={(props) => <CustomDrawer {...props} drawerType="slide"
+        // />}
         >
 
             {routes.map((route) => renderDrawerItem(route))}
