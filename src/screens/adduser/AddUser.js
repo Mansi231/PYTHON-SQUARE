@@ -78,6 +78,7 @@ const AddUser = () => {
                   onChangeText={handleChange('name')}
                   onBlur={handleBlur('name')}
                   value={values.name}
+                  placeholderTextColor={COLOR.textGrey}
                 />
                 <Feather name="edit-2" size={hp(2.8)} color={COLOR.textGrey} style={styles.icon} />
               </View>
@@ -94,6 +95,7 @@ const AddUser = () => {
                   onChangeText={handleChange('userId')}
                   onBlur={handleBlur('userId')}
                   value={values.userId}
+                  placeholderTextColor={COLOR.textGrey}
                 />
                 <Feather name="user" size={hp(3)} color={COLOR.textGrey} style={styles.icon} />
               </View>
@@ -105,6 +107,7 @@ const AddUser = () => {
             <View style={styles.box}>
               <View style={[styles.inputContainer, styles.commonInputStyle]}>
                 <TextInput
+                 placeholderTextColor={COLOR.textGrey}
                   style={styles.input}
                   placeholder="Password"
                   secureTextEntry={showPassword ? true : false}
@@ -174,7 +177,8 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: wp(2),
     fontFamily: FONTS.NunitoMedium,
-    fontSize: hp(2)
+    fontSize: hp(2),
+    color:COLOR.primaryBlue
   },
   icon: {
     marginLeft: wp(2),

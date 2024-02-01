@@ -20,16 +20,7 @@ const Dropdown = ({ options, onSelect, value, style, current, showDropdown, setS
             </TouchableOpacity>
 
             {showDropdown === current && (
-                <View style={styles.dropdownContainer}>
-                    {/* <FlatList
-                        data={options}
-                        renderItem={({ item }) => (
-                            <TouchableOpacity onPress={() => handleSelect(item)} style={styles.option}>
-                                <Text style={styles.optionText}>{item.label}</Text>
-                            </TouchableOpacity>
-                        )}
-                        keyExtractor={(item) => item.value.toString()}
-                    /> */}
+                <View style={[styles.dropdownContainer,showDropdown === current && {borderTopWidth:0,borderBottomWidth:0}]}>
                     <ScrollView
                         style={styles.dropdownScrollView}
                         scrollEnabled={true}
@@ -40,7 +31,7 @@ const Dropdown = ({ options, onSelect, value, style, current, showDropdown, setS
                     >
                         {
                             options.map((item, index) => (
-                                <TouchableOpacity key={index} onPress={() => handleSelect(item)} style={styles.option}>
+                                <TouchableOpacity key={index} onPress={() => handleSelect(item)} style={[styles.option]}>
                                     <Text style={styles.optionText}>{item.label}</Text>
                                 </TouchableOpacity>
                             ))
@@ -51,31 +42,6 @@ const Dropdown = ({ options, onSelect, value, style, current, showDropdown, setS
             }
 
         </View >
-        // <View style={[styles.container, style]}>
-        //     <TouchableOpacity onPress={() => { showDropdown === current ? setShowDropdown(false) : setShowDropdown(current) }} style={styles.header}>
-        //         <Text style={styles.headerText}>{value}</Text>
-        //     </TouchableOpacity>
-
-        //     <Collapsible collapsed={!(showDropdown === current)}>
-        //         <View style={styles.optionBox}>
-        //             <ScrollView
-        //                 style={styles.dropdownScrollView}
-        //                 scrollEnabled={true}
-        //                 showsVerticalScrollIndicator={true}
-        //                 nestedScrollEnabled={true}
-        //                 keyboardShouldPersistTaps='handled'
-        //             >
-        //                 {
-        //                     options.map((item, index) => (
-        //                         <TouchableOpacity key={index} onPress={() => handleSelect(item)} style={styles.option}>
-        //                             <Text style={styles.optionText}>{item.label}</Text>
-        //                         </TouchableOpacity>
-        //                     ))
-        //                 }
-        //             </ScrollView>
-        //         </View>
-        //     </Collapsible>
-        // </View>
     );
 };
 

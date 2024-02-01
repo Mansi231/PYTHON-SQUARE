@@ -16,25 +16,25 @@ const AddUserDetail = () => {
 
   const [open, setOpen] = useState(false)
   const [showDropdown, setShowDropdown] = useState(false);
-  // const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
-  const users = [
-    { label: 'Option 1', value: 1 },
-    { label: 'Option 2', value: 2 },
-    { label: 'Option 3', value: 3 },
-    { label: 'Option 3', value: 4 },
-    { label: 'Option 3', value: 5 },
-    { label: 'Option 3', value: 6 },
-    { label: 'Option 3', value: 7 },
-    { label: 'Option 3', value: 8 },
-    { label: 'Option 3', value: 9 },
-    { label: 'Option 3', value: 10 },
-    { label: 'Option 3', value: 11 },
-    { label: 'Option 3', value: 12 },
-  ];
+  // const users = [
+  //   { label: 'Option 1', value: 1 },
+  //   { label: 'Option 2', value: 2 },
+  //   { label: 'Option 3', value: 3 },
+  //   { label: 'Option 3', value: 4 },
+  //   { label: 'Option 3', value: 5 },
+  //   { label: 'Option 3', value: 6 },
+  //   { label: 'Option 3', value: 7 },
+  //   { label: 'Option 3', value: 8 },
+  //   { label: 'Option 3', value: 9 },
+  //   { label: 'Option 3', value: 10 },
+  //   { label: 'Option 3', value: 11 },
+  //   { label: 'Option 3', value: 12 },
+  // ];
 
   useEffect(() => {
-    // getUsers();
+    getUsers();
   }, [])
 
   const getUsers = async () => {
@@ -112,11 +112,11 @@ const AddUserDetail = () => {
           {
             selectedDate: moment(),
             selectedUser: null,
-            realised: { type: fieldsOption[0]?.label, value: null },
-            charges: { type: fieldsOption[0]?.label, value: null },
-            credits: { type: fieldsOption[0]?.label, value: null },
-            netRealised: { type: fieldsOption[0]?.label, value: null },
-            unrealised: { type: fieldsOption[0]?.label, value: null },
+            realised: { type: fieldsOption[0]?.label, value: null ,label :'Realised P&L '},
+            charges: { type: fieldsOption[0]?.label, value: null  ,label :'Charges & Taxes'},
+            credits: { type: fieldsOption[0]?.label, value: null  ,label :'Other credits & debits'},
+            netRealised: { type: fieldsOption[0]?.label, value: null  ,label :'Net realised P&L'},
+            unrealised: { type: fieldsOption[0]?.label, value: null  ,label :'Unrealised P&L'},
           }
         }
 
@@ -159,10 +159,10 @@ const AddUserDetail = () => {
                     mode={'date'}
                     onConfirm={val => {
                       setOpen(false);
-                      setFieldValue('date', moment(val))
+                      setFieldValue('selectedDate', moment(val))
                     }}
                     maximumDate={moment().toDate()}
-                    minimumDate={moment()?.toDate()}
+                    // minimumDate={moment()?.toDate()}
                     onCancel={() => {
                       setOpen(false);
                     }}
