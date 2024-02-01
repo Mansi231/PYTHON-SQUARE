@@ -13,43 +13,30 @@ const Dropdown = ({ options, onSelect, value, style, current, showDropdown, setS
         onSelect(option);
     };
 
-    console.log(!(showDropdown === current))
-
     return (
-        // <View style={[styles.container, style]}>
-        //     <TouchableOpacity onPress={() => { showDropdown === current ? setShowDropdown(false) : setShowDropdown(current) }} style={styles.header}>
-        //         <Text style={styles.headerText}>{value}</Text>
-        //     </TouchableOpacity>
-
-        //     {showDropdown === current && (
-        //         <View style={styles.dropdownContainer}>
-        //             <FlatList
-        //                 data={options}
-        //                 renderItem={({ item }) => (
-        //                     <TouchableOpacity onPress={() => handleSelect(item)} style={styles.option}>
-        //                         <Text style={styles.optionText}>{item.label}</Text>
-        //                     </TouchableOpacity>
-        //                 )}
-        //                 keyExtractor={(item) => item.value.toString()}
-        //             />
-        //         </View>
-        //     )
-        //     }
-
-        // </View >
         <View style={[styles.container, style]}>
             <TouchableOpacity onPress={() => { showDropdown === current ? setShowDropdown(false) : setShowDropdown(current) }} style={styles.header}>
                 <Text style={styles.headerText}>{value}</Text>
             </TouchableOpacity>
 
-            <Collapsible collapsed={!(showDropdown === current)}>
-                <View style={styles.optionBox}>
+            {showDropdown === current && (
+                <View style={styles.dropdownContainer}>
+                    {/* <FlatList
+                        data={options}
+                        renderItem={({ item }) => (
+                            <TouchableOpacity onPress={() => handleSelect(item)} style={styles.option}>
+                                <Text style={styles.optionText}>{item.label}</Text>
+                            </TouchableOpacity>
+                        )}
+                        keyExtractor={(item) => item.value.toString()}
+                    /> */}
                     <ScrollView
                         style={styles.dropdownScrollView}
                         scrollEnabled={true}
                         showsVerticalScrollIndicator={true}
                         nestedScrollEnabled={true}
                         keyboardShouldPersistTaps='handled'
+                        indicatorStyle='black'
                     >
                         {
                             options.map((item, index) => (
@@ -60,8 +47,35 @@ const Dropdown = ({ options, onSelect, value, style, current, showDropdown, setS
                         }
                     </ScrollView>
                 </View>
-            </Collapsible>
-        </View>
+            )
+            }
+
+        </View >
+        // <View style={[styles.container, style]}>
+        //     <TouchableOpacity onPress={() => { showDropdown === current ? setShowDropdown(false) : setShowDropdown(current) }} style={styles.header}>
+        //         <Text style={styles.headerText}>{value}</Text>
+        //     </TouchableOpacity>
+
+        //     <Collapsible collapsed={!(showDropdown === current)}>
+        //         <View style={styles.optionBox}>
+        //             <ScrollView
+        //                 style={styles.dropdownScrollView}
+        //                 scrollEnabled={true}
+        //                 showsVerticalScrollIndicator={true}
+        //                 nestedScrollEnabled={true}
+        //                 keyboardShouldPersistTaps='handled'
+        //             >
+        //                 {
+        //                     options.map((item, index) => (
+        //                         <TouchableOpacity key={index} onPress={() => handleSelect(item)} style={styles.option}>
+        //                             <Text style={styles.optionText}>{item.label}</Text>
+        //                         </TouchableOpacity>
+        //                     ))
+        //                 }
+        //             </ScrollView>
+        //         </View>
+        //     </Collapsible>
+        // </View>
     );
 };
 
@@ -89,14 +103,14 @@ const styles = StyleSheet.create({
         backgroundColor: COLOR.white,
 
     },
-    optionBox:{ height: hp(20) ,borderWidth:hp(.12),borderColor:COLOR.borderGrey },
+    optionBox: { maxHeight: hp(20), borderWidth: hp(.12), borderColor: COLOR.borderGrey },
     option: {
         padding: hp(1.7),
         borderColor: COLOR.borderGrey,
         borderWidth: hp(.17),
         borderTopWidth: 0,
-        borderLeftWidth:0,
-        borderRightWidth:0
+        borderLeftWidth: 0,
+        borderRightWidth: 0
     },
     headerText: {
         fontSize: hp(1.68),
