@@ -7,14 +7,51 @@ import Feather from 'react-native-vector-icons/Feather';
 import { FONTS } from '../../utils/fontFamily';
 import { Formik } from 'formik'
 import * as yup from 'yup';
+import auth from '@react-native-firebase/auth'
+import database from '@react-native-firebase/database';
+import firestore from '@react-native-firebase/firestore';
 
 const AddUser = () => {
 
   const [showPassword, setShowPassword] = useState(true);
 
-  const handleAddUser = (values) => {
-    console.log(values,':: values ::');
-    ToastAndroid.showWithGravityAndOffset('User added successfully .',ToastAndroid.SHORT,ToastAndroid.TOP,0,100)
+  const handleAddUser = async (values) => {
+
+    auth()
+      .createUserWithEmailAndPassword(`${values.userId}@example.com`, values.password)
+      .then(({ user }) => {
+
+        firestore().collection('users').doc(user.uid).set({
+          userId: values.userId,
+          name: values.name,
+          email: user.email, // You can store email separately if needed
+          role:'user'
+          // Add other user information as needed
+        }).then(() => {
+          return ToastAndroid.showWithGravityAndOffset('User added successfully .', ToastAndroid.SHORT, ToastAndroid.TOP, 0, 100)
+          console.log('User added!');
+        }).catch((error) => console.log(error, ' :: error in adding user ::'));
+
+      })
+      .catch(error => {
+        if (error.code === 'auth/email-already-in-use') {
+
+          return ToastAndroid.showWithGravityAndOffset('That user id is already in use!', ToastAndroid.SHORT, ToastAndroid.TOP, 0, 100)
+
+          console.log('That email address is already in use!');
+        }
+
+        if (error.code === 'auth/invalid-email') {
+
+          return ToastAndroid.showWithGravityAndOffset('That user id is invalid!', ToastAndroid.SHORT, ToastAndroid.TOP, 0, 100)
+
+          console.log('That user id is invalid!');
+        }
+
+        console.error(error);
+      });
+
+
   };
 
   const validationSchema = yup.object().shape({

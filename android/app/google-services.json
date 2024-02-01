@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "808974679751",
+    "project_id": "pythonsquare-19454",
+    "storage_bucket": "pythonsquare-19454.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:808974679751:android:246c98fe498c0f8b5d08e2",
+        "android_client_info": {
+          "package_name": "com.pythonsquare"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCY_m1keHpaq4twrppP6F69TsNKFO9-zWo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

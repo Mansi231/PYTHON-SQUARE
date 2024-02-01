@@ -7,14 +7,39 @@ import Feather from 'react-native-vector-icons/Feather';
 import { FONTS } from '../../utils/fontFamily';
 import { Formik } from 'formik'
 import * as yup from 'yup';
+import useAuth from '../../components/customhook/useAuth';
+import { ROUTES } from '../../../services/routes';
 
-const Login = () => {
+const Login = ({ navigation }) => {
 
   const [showPassword, setShowPassword] = useState(true);
+  const { initializing, user, signIn } = useAuth();
 
-  const handleLogin = (values) => {
-    // Your login logic here
-    console.log('Logging in with:', values);
+
+  const handleLogin = async (values) => {
+    try {
+      // Sign in and get user data
+      const userCredential = await signIn(`${values.userId}@example.com`, values.password);
+      const signedInUser = userCredential.user;
+
+      // Access the user's email and perform further actions
+      const userEmail = signedInUser.email;
+
+      // Example: Check conditions based on the user's email
+      if (userEmail === 'admin123@example.com') {
+        // Do something for admin user
+        navigation.navigate(ROUTES.DRAWER);
+      } else {
+        navigation.navigate(ROUTES.DASHBOARD);
+        // Do something for regular user
+      }
+
+      // Navigate to the dashboard screen
+    } catch (error) {
+      console.error('Error signing in:', error);
+    }
+
+    // console.log('Logging in with:', values);
   };
 
   const validationSchema = yup.object().shape({
@@ -56,12 +81,12 @@ const Login = () => {
                 <TextInput
                   style={styles.input}
                   placeholder="Password"
-                  secureTextEntry={showPassword ? true :false}
+                  secureTextEntry={showPassword ? true : false}
                   onChangeText={handleChange('password')}
                   onBlur={handleBlur('password')}
                   value={values.password}
                 />
-                <TouchableOpacity onPress={()=>setShowPassword(preVal=>!preVal)}>
+                <TouchableOpacity onPress={() => setShowPassword(preVal => !preVal)}>
                   <Feather
                     name={showPassword ? 'eye-off' : 'eye'}
                     size={hp(3)}
@@ -122,8 +147,8 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     paddingHorizontal: wp(2),
-    fontFamily:FONTS.NunitoMedium,
-    fontSize:hp(2)
+    fontFamily: FONTS.NunitoMedium,
+    fontSize: hp(2)
   },
   icon: {
     marginLeft: wp(2),

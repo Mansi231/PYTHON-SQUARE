@@ -23,8 +23,8 @@ const Drawer = createDrawerNavigator();
 const DrawerScreen = ({ navigation }) => {
 
     const routes = [
-        { name: ROUTES.ADD_USER_DETAIL, icon: 'stats-chart', iconBorder: true, component: AddUserDetail, title: 'Add User Detail' },
         { name: ROUTES.ADD_USER, icon: 'person-sharp', component: AddUser, title: 'Add User' },
+        { name: ROUTES.ADD_USER_DETAIL, icon: 'stats-chart', iconBorder: true, component: AddUserDetail, title: 'Add User Detail' },
     ];
 
 
@@ -49,7 +49,7 @@ const DrawerScreen = ({ navigation }) => {
                 drawerActiveTintColor: COLOR.blue,
                 drawerInactiveTintColor: COLOR.black,
                 headerShown: true,
-                headerStyle:{backgroundColor:COLOR.blue}
+                headerStyle: { backgroundColor: COLOR.blue }
             }}
         />
     );
@@ -60,8 +60,8 @@ const DrawerScreen = ({ navigation }) => {
             screenOptions={{
                 drawerStyle: { backgroundColor: COLOR.screenBg, width: wp(70) }
             }}
-        // drawerContent={(props) => <CustomDrawer {...props} drawerType="slide"
-        // />}
+            drawerContent={(props) => <CustomDrawer {...props} drawerType="slide"
+            />}
         >
 
             {routes.map((route) => renderDrawerItem(route))}
@@ -77,7 +77,7 @@ const Navigation = ({ navigation }) => {
     return (
         <NavigationContainer ref={navigationRef}>
             <Stack.Navigator>
-                {/* <Stack.Screen
+                <Stack.Screen
                     name={ROUTES.SPLASH_SCREEN}
                     component={SplashScreen}
                     options={{ headerShown: false }}
@@ -87,7 +87,7 @@ const Navigation = ({ navigation }) => {
                     name={ROUTES.LOGIN}
                     component={Login}
                     options={{ headerShown: false }}
-                /> */}
+                />
                 {/* DrawerScreen */}
                 <Stack.Screen
                     name={ROUTES.DRAWER}
