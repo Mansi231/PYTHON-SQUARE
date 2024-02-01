@@ -63,6 +63,7 @@ const Login = ({ navigation }) => {
             <View style={styles.box}>
               <View style={[styles.inputContainer, styles.commonInputStyle]}>
                 <TextInput
+                  placeholderTextColor={COLOR.textGrey}
                   style={styles.input}
                   placeholder="User ID"
                   onChangeText={handleChange('userId')}
@@ -79,6 +80,7 @@ const Login = ({ navigation }) => {
             <View style={styles.box}>
               <View style={[styles.inputContainer, styles.commonInputStyle]}>
                 <TextInput
+                  placeholderTextColor={COLOR.textGrey}
                   style={styles.input}
                   placeholder="Password"
                   secureTextEntry={showPassword ? true : false}
@@ -148,7 +150,8 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: wp(2),
     fontFamily: FONTS.NunitoMedium,
-    fontSize: hp(2)
+    fontSize: hp(2),
+    color:COLOR.primaryBlue
   },
   icon: {
     marginLeft: wp(2),

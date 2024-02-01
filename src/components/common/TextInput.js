@@ -38,7 +38,7 @@ const TextInputCommon = ({
 
         <TextInput style={[styles?.phoneNumber, styles?.numberText, { textAlign: "left" }, style]}
             editable={true}
-            value={value }
+            value={value}
             onChangeText={onChangeText}
             onFocus={() => { }}
             onBlur={() => { }}
@@ -48,6 +48,7 @@ const TextInputCommon = ({
             numberOfLines={numberOfLines}
             textAlignVertical='center'
             placeholder={placeholder}
+            placeholderTextColor={COLOR.textGrey}
         />
     );
 };
@@ -58,7 +59,7 @@ const styles = StyleSheet.create({
     phoneNumber: {
         height: hp(6.4),
         borderRadius: hp(.2),
-        borderWidth: hp(.17),flexGrow:1,
+        borderWidth: hp(.17), flexGrow: 1,
         borderColor: COLOR.borderGrey, textAlign: 'left',
     },
     numberText: {

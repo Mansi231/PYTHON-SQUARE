@@ -23,8 +23,8 @@ const Drawer = createDrawerNavigator();
 const DrawerScreen = ({ navigation }) => {
 
     const routes = [
-        { name: ROUTES.ADD_USER, icon: 'person-sharp', component: AddUser, title: 'Add User' },
         { name: ROUTES.ADD_USER_DETAIL, icon: 'stats-chart', iconBorder: true, component: AddUserDetail, title: 'Add User Detail' },
+        { name: ROUTES.ADD_USER, icon: 'person-sharp', component: AddUser, title: 'Add User' },
     ];
 
 

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View, ScrollView } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View, ScrollView, ToastAndroid, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../../../pixel'
 import { COLOR } from '../../utils/color'
@@ -16,33 +16,31 @@ const AddUserDetail = () => {
 
   const [open, setOpen] = useState(false)
   const [showDropdown, setShowDropdown] = useState(false);
-  const [users, setUsers] = useState([]);
-
-  // const users = [
-  //   { label: 'Option 1', value: 1 },
-  //   { label: 'Option 2', value: 2 },
-  //   { label: 'Option 3', value: 3 },
-  //   { label: 'Option 3', value: 4 },
-  //   { label: 'Option 3', value: 5 },
-  //   { label: 'Option 3', value: 6 },
-  //   { label: 'Option 3', value: 7 },
-  //   { label: 'Option 3', value: 8 },
-  //   { label: 'Option 3', value: 9 },
-  //   { label: 'Option 3', value: 10 },
-  //   { label: 'Option 3', value: 11 },
-  //   { label: 'Option 3', value: 12 },
-  // ];
+  // const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const users = [
+    { label: 'Option 1', value: 1 },
+    { label: 'Option 2', value: 2 },
+    { label: 'Option 3', value: 3 },
+    { label: 'Option 3', value: 4 },
+    { label: 'Option 3', value: 5 },
+    { label: 'Option 3', value: 6 },
+    { label: 'Option 3', value: 7 },
+    { label: 'Option 3', value: 8 },
+    { label: 'Option 3', value: 9 },
+    { label: 'Option 3', value: 10 },
+    { label: 'Option 3', value: 11 },
+    { label: 'Option 3', value: 12 },
+  ];
 
   useEffect(() => {
-    const unsubscribe = getUsers();
-
-    return unsubscribe;
+    // getUsers();
   }, [])
 
   const getUsers = async () => {
     try {
       const querySnapshot = await firestore().collection('users').where('role', '!=', 'admin').get();
-      const users = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data(),label: doc.data().name,value: doc.id, }));
+      const users = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data(), label: doc.data().name, value: doc.id, }));
       setUsers(users)
     } catch (error) {
       console.log(error, ':: error while fetching users ::')
@@ -75,9 +73,35 @@ const AddUserDetail = () => {
     }),
   });
 
-  const handleAddUserDetail = (values) => {
-    console.log(values, ':: values ::');
+  const handleAddUserDetail = async (values, { resetForm }) => {
+    try {
+      setLoading(true);
+      const userDetailDocRef = firestore()
+        .collection('userDetail')
+        .doc(values.selectedUser.id)
+        .collection('details') // Add a subcollection for details
+        .doc(values.selectedDate.format('YYYY-MM-DD')); // Use the selected date as the document ID
+
+      await userDetailDocRef.set({
+        realised: values.realised,
+        charges: values.charges,
+        credits: values.credits,
+        netRealised: values.netRealised,
+        unrealised: values.unrealised,
+      });
+
+
+      ToastAndroid.showWithGravityAndOffset('User detail added successfully.', ToastAndroid.SHORT, ToastAndroid.TOP, 0, 100);
+    } catch (error) {
+      ToastAndroid.showWithGravityAndOffset('Error while adding details.', ToastAndroid.SHORT, ToastAndroid.TOP, 0, 100);
+      console.error('Error adding user details:', error);
+    } finally {
+      resetForm();
+      setLoading(false);
+    }
+
   }
+
 
   const fieldsOption = [{ label: 'profit', value: 'profit' }, { label: 'loss', value: 'loss' }]
 
@@ -99,12 +123,12 @@ const AddUserDetail = () => {
         validationSchema={validationSchema}
         onSubmit={handleAddUserDetail}
       >
-        {({ handleChange, handleBlur, handleSubmit, setFieldValue, values, errors, touched }) => (
+        {({ handleChange, handleBlur, handleSubmit, setFieldValue, values, errors, touched, rese }) => (
 
           <>
             <ScrollView
+              nestedScrollEnabled={true}
               showsVerticalScrollIndicator={false}
-              scrollEnabled={true}
               keyboardShouldPersistTaps="handled"
               contentContainerStyle={{ flexGrow: 1, paddingBottom: hp(15) }} style={{ width: '100%' }}>
 
@@ -292,7 +316,11 @@ const AddUserDetail = () => {
                 </View>
 
                 <TouchableOpacity style={[styles.button, styles.commonInputStyle]} onPress={handleSubmit}>
-                  <Text style={styles.buttonText}>Add User Detail</Text>
+                  {loading ? (
+                    <ActivityIndicator color={COLOR.white} size={'large'} />
+                  ) : (
+                    <Text style={styles.buttonText}>Add User Detail</Text>
+                  )}
                 </TouchableOpacity>
 
               </View>
