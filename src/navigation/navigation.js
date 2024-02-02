@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity, Platform } from 'react-native';
 import React, { useRef, useEffect, useState, useContext, useCallback } from 'react';
-import { NavigationContainer, useFocusEffect } from '@react-navigation/native';
+import { NavigationContainer, useFocusEffect, DrawerActions } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -16,6 +16,8 @@ import { FONTS } from '../utils/fontFamily';
 import AddUser from '../screens/adduser/AddUser';
 import AddUserDetail from '../screens/adduserdetail/AddUserDetail';
 import Dashboard from '../screens/dashboard/Dashboard';
+import Feather from 'react-native-vector-icons/Feather'
+import Users from '../screens/users/Users';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -23,8 +25,8 @@ const Drawer = createDrawerNavigator();
 const DrawerScreen = ({ navigation }) => {
 
     const routes = [
-        { name: ROUTES.ADD_USER_DETAIL, icon: 'stats-chart', iconBorder: true, component: AddUserDetail, title: 'Add User Detail' },
-        { name: ROUTES.ADD_USER, icon: 'person-sharp', component: AddUser, title: 'Add User' },
+        { name: ROUTES.USERS, icon: 'user-plus', component: Users, title: 'Users' },
+        { name: ROUTES.ADD_USER_DETAIL, icon: 'edit-3', iconBorder: true, component: AddUserDetail, title: 'Add User Detail' },
     ];
 
 
@@ -45,11 +47,27 @@ const DrawerScreen = ({ navigation }) => {
             component={component}
             options={{
                 title,
-                drawerLabel: title,
+                drawerLabel: ({ focused, color, size }) => (
+                    <View style={{ flexDirection: 'row', alignItems: 'center' ,paddingHorizontal:wp(3),gap:wp(2)}}>
+                        <Feather name={icon} size={hp(2.3)} color={color} style={{ marginRight: wp(2) }} />
+                        <Text style={{ color: focused ? COLOR.blue : COLOR.black, fontSize: hp(1.6), fontFamily: FONTS.NunitoMedium,  marginVertical: hp(.7) ,textAlign:'center'}}>
+                            {title}
+                        </Text>
+                    </View>
+                ),
+                drawerLabelStyle: { fontSize: hp(1.6), fontFamily: FONTS.NunitoMedium, paddingLeft: wp(2), marginVertical: hp(.7) },
                 drawerActiveTintColor: COLOR.blue,
                 drawerInactiveTintColor: COLOR.black,
                 headerShown: true,
-                headerStyle: { backgroundColor: COLOR.blue }
+                headerStyle: { backgroundColor: COLOR.blue, height: hp(12) },
+                headerTintColor: COLOR.white,
+                headerTitleStyle: { fontFamily: FONTS.NunitoMedium, letterSpacing: wp(.2), fontSize: hp(2)},
+                headerLeft: ({ color, onPress }) => (
+                    <TouchableOpacity style={{ marginLeft: wp(3) }} onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>
+                        <Feather name="menu" size={hp(2.3
+                        )} color={COLOR.white} style={{ marginRight: wp(2) }} />
+                    </TouchableOpacity>
+                ),
             }}
         />
     );
@@ -88,7 +106,7 @@ const Navigation = ({ navigation }) => {
                     component={Login}
                     options={{ headerShown: false }}
                 />
-                
+
                 {/* DrawerScreen */}
                 <Stack.Screen
                     name={ROUTES.DRAWER}
@@ -98,6 +116,11 @@ const Navigation = ({ navigation }) => {
                 <Stack.Screen
                     name={ROUTES.DASHBOARD}
                     component={Dashboard}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name={ROUTES.ADD_USER}
+                    component={AddUser}
                     options={{ headerShown: false }}
                 />
 

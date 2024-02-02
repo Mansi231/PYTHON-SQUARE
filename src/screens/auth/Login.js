@@ -1,5 +1,6 @@
+import Toast from 'react-native-toast-message';
 import React, { useState } from 'react';
-import { StyleSheet, Text, TextInput, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TextInput, View, TouchableOpacity, ActivityIndicator, ToastAndroid, StatusBar, Keyboard } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLOR } from '../../utils/color';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../../../pixel';
@@ -13,10 +14,12 @@ import { ROUTES } from '../../../services/routes';
 const Login = ({ navigation }) => {
 
   const [showPassword, setShowPassword] = useState(true);
+  const [loading, setLoading] = useState(false);
+
   const { initializing, user, signIn } = useAuth();
 
-
-  const handleLogin = async (values) => {
+  const handleLogin = async (values, { resetForm }) => {
+    setLoading(true)
     try {
       // Sign in and get user data
       const userCredential = await signIn(`${values.userId}@example.com`, values.password);
@@ -27,19 +30,38 @@ const Login = ({ navigation }) => {
 
       // Example: Check conditions based on the user's email
       if (userEmail === 'admin123@example.com') {
-        // Do something for admin user
         navigation.navigate(ROUTES.DRAWER);
       } else {
         navigation.navigate(ROUTES.DASHBOARD);
-        // Do something for regular user
       }
 
-      // Navigate to the dashboard screen
     } catch (error) {
-      console.error('Error signing in:', error);
+      if (error?.code === 'auth/invalid-email' || error?.code === 'auth/invalid-credential') {
+        console.log('errror in user iddddd')
+        Toast.show({
+          type: 'error',
+          text1: 'Invalid Credential .',
+          visibilityTime: 3000,
+          text1Style:{fontFamily:FONTS.NunitoMedium,fontSize:hp(1.3),color:COLOR.black,letterSpacing:wp(.1)},
+          swipeable:true
+        });
+
+      }
+      else {
+        Toast.show({
+          type: 'error',
+          text1: `${error}`,
+          visibilityTime: 3000,
+          swipeable:true,
+          text1Style:{fontFamily:FONTS.NunitoMedium,fontSize:hp(1.3),color:COLOR.black,letterSpacing:wp(.1)},
+        });
+      }
+    } finally {
+      setLoading(false)
+      // resetForm()
+      Keyboard.dismiss()
     }
 
-    // console.log('Logging in with:', values);
   };
 
   const validationSchema = yup.object().shape({
@@ -48,10 +70,14 @@ const Login = ({ navigation }) => {
   });
 
   return (
-    <SafeAreaView style={{ flex: 1, paddingHorizontal: wp(4), backgroundColor: COLOR.screenBg }}>
-      <Text style={styles.logoText}>PythonSquare</Text>
+    <SafeAreaView style={{ flex: 1, paddingHorizontal: wp(4), backgroundColor: COLOR.screenBg, justifyContent: 'center' }}>
+      <StatusBar translucent backgroundColor={COLOR.screenBg} barStyle={'dark-content'} />
 
-      <Text style={styles.loginText}>Login</Text>
+      <View style={styles?.header}>
+        <Text style={styles.logoText}>PythonSquare</Text>
+
+        <Text style={styles.loginText}>Login</Text>
+      </View>
       <Formik
         initialValues={{ userId: '', password: '' }}
         validationSchema={validationSchema}
@@ -98,12 +124,19 @@ const Login = ({ navigation }) => {
                 </TouchableOpacity>
               </View>
               {touched.password && errors.password && (
-                <Text style={styles.errorText}>{errors.password}</Text>
+                loading ? (
+                  <ActivityIndicator color={COLOR.white} size={'large'} />
+                ) :
+                  (<Text style={styles.errorText}>{errors.password}</Text>)
               )}
             </View>
+            <Toast position='top'/>
 
             <TouchableOpacity style={[styles.button, styles.commonInputStyle]} onPress={handleSubmit}>
-              <Text style={styles.buttonText}>Login</Text>
+              {loading ? (
+                <ActivityIndicator color={COLOR.white} size={'large'} />
+              ) : <Text style={styles.buttonText}>Login</Text>
+              }
             </TouchableOpacity>
           </View>
         )}
@@ -112,16 +145,20 @@ const Login = ({ navigation }) => {
   );
 };
 
+
 export default Login;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: hp(3),
     backgroundColor: COLOR.screenBg,
     gap: hp(4)
+  },
+  header: {
+    position: 'absolute', top: 0, zIndex: 1, paddingHorizontal: wp(4), right: 0, left: 0
   },
   logoText: {
     alignSelf: 'flex-end',
@@ -129,7 +166,6 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.NunitoSemiBold,
     fontSize: hp(2.5),
     color: COLOR.lightGrey70,
-
   },
   loginText: {
     fontSize: hp(3),
@@ -151,7 +187,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp(2),
     fontFamily: FONTS.NunitoMedium,
     fontSize: hp(2),
-    color:COLOR.primaryBlue
+    color: COLOR.primaryBlue
   },
   icon: {
     marginLeft: wp(2),

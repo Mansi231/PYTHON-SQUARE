@@ -40,7 +40,7 @@ const TextInputCommon = ({
             editable={true}
             value={value}
             onChangeText={onChangeText}
-            onFocus={() => { }}
+            onFocus={onFocus ? onFocus :() => { }}
             onBlur={() => { }}
             keyboardType={keyboardType}
             // keyboardType={'number-pad'}

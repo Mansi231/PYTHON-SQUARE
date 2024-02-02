@@ -14,25 +14,18 @@ const CustomDrawer = (props) => {
     const handleLogout = async () => {
         try {
             await signOut();
-            // After successful sign-out, you can navigate to the login screen or any other screen
             props.navigation.replace(ROUTES.LOGIN);
         } catch (error) {
             console.error('Error signing out:', error);
         }
     };
 
-
     return (
         <View style={styles?.container}>
             <DrawerContentScrollView>
-                {/* <View style={styles?.headerContainer}>
-                    <Image source={user} style={{ height: hp(5.5), width: hp(5.5), borderRadius: hp(8) }} />
-                    <View style={{ flexDirection: 'column', gap: hp(.1), }}>
-                        <Text style={styles?.nameText}>{userDetail?.name}</Text>
-                        <Text style={styles?.userTypeText}>{type}</Text>
-                    </View>
-                    <Text>User </Text>
-                </View> */}
+                <View style={styles?.headerContainer}>
+                    <Text style={{ color: COLOR.black, fontSize: hp(2.2), fontFamily: FONTS.NunitoBold }}>{user?.email?.split('@')[0]} </Text>
+                </View>
 
                 <View style={{ paddingVertical: hp(2), }}>
                     <DrawerItemList {...props}
@@ -61,8 +54,8 @@ const styles = StyleSheet.create({
     nameText: { fontSize: hp(1.9), color: COLOR.primaryBlue, fontFamily: FONTS.InterSemiBold },
     userTypeText: { fontSize: hp(1.75), color: COLOR.textGrey, fontFamily: FONTS.InterSemiBold },
     headerContainer: {
-        width: '100%', justifyContent: 'flex-start', alignItems: 'center', flexDirection: 'row', gap: wp(1.2), marginTop: hp(2),
-        marginHorizontal: Platform?.OS == 'android' ? wp(1) : wp(2), paddingHorizontal: wp(2.4)
+        width: '100%', justifyContent: 'flex-start', alignItems: 'center', flexDirection: 'row', gap: wp(1.2),
+        marginHorizontal: wp(1), paddingHorizontal: wp(2.4)
     },
     bottomTextContainer: { paddingVertical: hp(2), flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: hp(1), width: '100%' },
     logoutIcon: { height: hp(1.9), width: hp(2), tintColor: COLOR.primaryGreen, alignSelf: 'center' },

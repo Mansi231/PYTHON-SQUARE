@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, FlatList, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, FlatList, ScrollView, Keyboard } from 'react-native';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from
     '../../../pixel';
 import { COLOR } from '../../utils/color';
 import { FONTS } from '../../utils/fontFamily';
-import Collapsible from 'react-native-collapsible';
 
 const Dropdown = ({ options, onSelect, value, style, current, showDropdown, setShowDropdown }) => {
 
@@ -13,9 +12,13 @@ const Dropdown = ({ options, onSelect, value, style, current, showDropdown, setS
         onSelect(option);
     };
 
+    const handlePress = () =>{
+        showDropdown === current ? setShowDropdown(false) : setShowDropdown(current)
+        Keyboard.dismiss()
+    }
     return (
         <View style={[styles.container, style]}>
-            <TouchableOpacity onPress={() => { showDropdown === current ? setShowDropdown(false) : setShowDropdown(current) }} style={styles.header}>
+            <TouchableOpacity onPress={handlePress } style={styles.header}>
                 <Text style={styles.headerText}>{value}</Text>
             </TouchableOpacity>
 

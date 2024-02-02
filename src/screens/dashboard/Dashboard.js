@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { COLOR } from '../../utils/color'
@@ -8,8 +8,10 @@ import moment from 'moment'
 import { FONTS } from '../../utils/fontFamily'
 import firestore from '@react-native-firebase/firestore';
 import useAuth from '../../components/customhook/useAuth'
+import { ROUTES } from '../../../services/routes'
+import AntDesign from 'react-native-vector-icons/AntDesign'
 
-const Dashboard = () => {
+const Dashboard = ({ navigation }) => {
   const [open, setOpen] = useState(false)
   const [selectedDate, setSelectedDate] = useState(moment())
   const [userDetails, setUserDetails] = useState(null);
@@ -34,7 +36,6 @@ const Dashboard = () => {
 
       if (userDetailDoc.exists) {
         const data = userDetailDoc.data();
-        console.log(data, ':: data ::');
         setUserDetails(data);
       } else {
         setUserDetails(null);
@@ -53,9 +54,29 @@ const Dashboard = () => {
       return value.toString();
     }
   }
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      navigation.replace(ROUTES.LOGIN);
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
 
   return (
     <SafeAreaView style={[{ flex: 1, paddingHorizontal: wp(4), backgroundColor: COLOR.screenBg }, styles?.container]}>
+
+      <StatusBar translucent backgroundColor={COLOR.blue} barStyle={'dark-content'} />
+
+      <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Text style={{ color: COLOR.primaryBlue, fontSize: hp(2), fontFamily: FONTS.NunitoBold, textAlign: 'left', alignSelf: 'flex-start' }}>{user?.email?.split('@')[0]}</Text>
+        <TouchableOpacity
+          onPress={handleLogout}
+          style={styles?.logoutContainer}>
+          <AntDesign name={'logout'} size={hp(2)} color={COLOR.primaryGreen} />
+          <Text style={styles?.logoutText}>Log Out</Text>
+        </TouchableOpacity>
+      </View>
 
       <View style={styles?.box}>
         <Text style={styles?.dateText}>
@@ -89,22 +110,25 @@ const Dashboard = () => {
           }}
         />
       </View>
+
+      {/* <View style={{width:'100%',borderColor:COLOR.borderGrey,borderWidth:hp(.03)}}/> */}
+
       <ScrollView
         nestedScrollEnabled={true}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
-        contentContainerStyle={{ flexGrow: 1, paddingBottom: hp(15) }} style={{ width: '100%' }}>
+        contentContainerStyle={{ flexGrow: 1,height:'auto'}} style={{ width: '100%' }}>
 
         <View style={styles.dataContainer}>
           {
-            userDetails != null && Object?.keys(userDetails)?.map((item, index) => (
+            userDetails != null ? Object?.keys(userDetails)?.map((item, index) => (
               <View key={index} style={[styles.dataCard, index == Object?.keys(userDetails)?.length - 1 && { marginRight: 'auto', marginLeft: wp(1) }]}>
                 <Text style={styles.title}>{userDetails[item]?.label}</Text>
                 <Text style={[styles?.text, userDetails[item]?.type == 'loss' && { color: COLOR.errorColor }]}>{
                   userDetails[item]?.type == 'loss' ? `-${formatNumber(userDetails[item]?.value)}` : formatNumber(userDetails[item]?.value)
                 }</Text>
               </View>
-            ))
+            )) : <View style={styles?.header}><Text style={styles.noDataText}>{`No Data Found for  ${selectedDate.format('DD-MM-YYYY')}`}</Text></View>
           }
         </View>
       </ScrollView>
@@ -123,7 +147,12 @@ const styles = StyleSheet.create({
     backgroundColor: COLOR.screenBg,
     gap: hp(3)
   },
-  box: { width: '100%', display: 'flex', flexDirection: 'column', gap: hp(1.5) },
+  logoutContainer: { flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', gap: wp(2) },
+  logoutText: { fontFamily: FONTS.InterMedium, fontSize: hp(2), color: COLOR.primaryGreen, textAlign: 'left' },
+
+  noDataText: { color: COLOR.textGrey, fontSize: hp(1.7), textAlign: 'center', fontFamily: FONTS.NunitoRegular, letterSpacing: wp(.1) },
+  header: { width: '100%', backgroundColor: COLOR.white, paddingVertical: hp(2) },
+  box: { width: '100%', display: 'flex', flexDirection: 'column', gap: hp(1.5), backgroundColor: COLOR.white, paddingVertical: hp(1.6), paddingHorizontal: wp(2) },
 
   datePickerViewStyle: {
     height: hp(6.4),
