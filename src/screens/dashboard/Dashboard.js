@@ -1,5 +1,5 @@
 import { ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { COLOR } from '../../utils/color'
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from '../../../pixel'
@@ -10,25 +10,29 @@ import firestore from '@react-native-firebase/firestore';
 import useAuth from '../../components/customhook/useAuth'
 import { ROUTES } from '../../../services/routes'
 import AntDesign from 'react-native-vector-icons/AntDesign'
+import { ValContext } from '../../context/Context'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const Dashboard = ({ navigation }) => {
   const [open, setOpen] = useState(false)
   const [selectedDate, setSelectedDate] = useState(moment())
   const [userDetails, setUserDetails] = useState(null);
 
-  const { initializing, user, signIn, signOut } = useAuth();
+  const {signOut } = useAuth();
+  const { loggedInUser, setLoggedInUser } = useContext(ValContext)
+
 
   useEffect(() => {
-    if (user?.uid) {
+    if (loggedInUser?.uid) {
       fetchUserDetails(selectedDate);
     }
-  }, [user?.uid]);
+  }, [loggedInUser?.uid]);
 
   const fetchUserDetails = async (date) => {
     try {
       const userDetailDocRef = firestore()
         .collection('userDetail')
-        .doc(user?.uid)
+        .doc(loggedInUser?.uid)
         .collection('details')
         .doc(date.format('YYYY-MM-DD'));
 
@@ -46,16 +50,22 @@ const Dashboard = ({ navigation }) => {
   };
 
   function formatNumber(value) {
-    if (value >= 1e6) {
-      return (value / 1e6).toFixed(1) + 'L';
+    if (value >= 1e9) {
+      return (value / 1e9).toFixed(1) + 'B'; // Billion
+    } else if (value >= 1e7) {
+      return (value / 1e7).toFixed(1) + 'Cr'; // Crore
+    } else if (value >= 1e6) {
+      return (value / 1e6).toFixed(1) + 'M'; // Million
     } else if (value >= 1e3) {
-      return (value / 1e3).toFixed(1) + 'k';
+      return (value / 1e3).toFixed(1) + 'K'; // Thousand
     } else {
       return value.toString();
     }
   }
+
   const handleLogout = async () => {
     try {
+      await AsyncStorage.clear();
       await signOut();
       navigation.replace(ROUTES.LOGIN);
     } catch (error) {
@@ -69,7 +79,7 @@ const Dashboard = ({ navigation }) => {
       <StatusBar translucent backgroundColor={COLOR.blue} barStyle={'dark-content'} />
 
       <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Text style={{ color: COLOR.primaryBlue, fontSize: hp(2), fontFamily: FONTS.NunitoBold, textAlign: 'left', alignSelf: 'flex-start' }}>{user?.email?.split('@')[0]}</Text>
+        <Text style={{ color: COLOR.primaryBlue, fontSize: hp(2), fontFamily: FONTS.NunitoBold, textAlign: 'left', alignSelf: 'flex-start' }}>{loggedInUser?.email?.split('@')[0]}</Text>
         <TouchableOpacity
           onPress={handleLogout}
           style={styles?.logoutContainer}>
@@ -125,7 +135,7 @@ const Dashboard = ({ navigation }) => {
               <View key={index} style={[styles.dataCard, index == Object?.keys(userDetails)?.length - 1 && { marginRight: 'auto', marginLeft: wp(1) }]}>
                 <Text style={styles.title}>{userDetails[item]?.label}</Text>
                 <Text style={[styles?.text, userDetails[item]?.type == 'loss' && { color: COLOR.errorColor }]}>{
-                  userDetails[item]?.type == 'loss' ? `-${formatNumber(userDetails[item]?.value)}` : formatNumber(userDetails[item]?.value)
+                  userDetails[item]?.type == 'loss' ? `-${formatNumber(userDetails[item]?.value)}` : `+${formatNumber(userDetails[item]?.value)}`
                 }</Text>
               </View>
             )) : <View style={styles?.header}><Text style={styles.noDataText}>{`No Data Found for  ${selectedDate.format('DD-MM-YYYY')}`}</Text></View>
@@ -190,6 +200,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp(5),
     paddingVertical: hp(2),
   },
-  text: { color: COLOR.black, fontSize: hp(2.4), fontFamily: FONTS.NunitoSemiBold, textAlign: 'left' },
+  text: { color: COLOR.primaryGreen, fontSize: hp(2.4), fontFamily: FONTS.NunitoSemiBold, textAlign: 'left' },
   title: { fontFamily: FONTS.NunitoRegular, fontSize: hp(2.2), color: COLOR.black, textAlign: 'left' },
 })

@@ -1,15 +1,16 @@
 import { useState, useEffect } from 'react';
 import auth from '@react-native-firebase/auth';
+import { AppState } from 'react-native'; // Import AppState
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const useAuth = () => {
-  const [user, setUser] = useState(null);
   const [initializing, setInitializing] = useState(true);
 
   // Handle user state changes
   const onAuthStateChanged = (user) => {
-    setUser(user);
     if (initializing) setInitializing(false);
   };
+  
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
@@ -35,7 +36,6 @@ const useAuth = () => {
   };
 
   return {
-    user,
     initializing,
     signIn,
     signOut,

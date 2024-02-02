@@ -1,4 +1,5 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity, Platform } from 'react-native';
+import Toast from 'react-native-toast-message';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Platform, Keyboard } from 'react-native';
 import React, { useRef, useEffect, useState, useContext, useCallback } from 'react';
 import { NavigationContainer, useFocusEffect, DrawerActions } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -48,9 +49,9 @@ const DrawerScreen = ({ navigation }) => {
             options={{
                 title,
                 drawerLabel: ({ focused, color, size }) => (
-                    <View style={{ flexDirection: 'row', alignItems: 'center' ,paddingHorizontal:wp(3),gap:wp(2)}}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: wp(3), gap: wp(2) }}>
                         <Feather name={icon} size={hp(2.3)} color={color} style={{ marginRight: wp(2) }} />
-                        <Text style={{ color: focused ? COLOR.blue : COLOR.black, fontSize: hp(1.6), fontFamily: FONTS.NunitoMedium,  marginVertical: hp(.7) ,textAlign:'center'}}>
+                        <Text style={{ color: focused ? COLOR.blue : COLOR.black, fontSize: hp(1.6), fontFamily: FONTS.NunitoMedium, marginVertical: hp(.7), textAlign: 'center' }}>
                             {title}
                         </Text>
                     </View>
@@ -61,9 +62,9 @@ const DrawerScreen = ({ navigation }) => {
                 headerShown: true,
                 headerStyle: { backgroundColor: COLOR.blue, height: hp(12) },
                 headerTintColor: COLOR.white,
-                headerTitleStyle: { fontFamily: FONTS.NunitoMedium, letterSpacing: wp(.2), fontSize: hp(2)},
+                headerTitleStyle: { fontFamily: FONTS.NunitoMedium, letterSpacing: wp(.2), fontSize: hp(2) },
                 headerLeft: ({ color, onPress }) => (
-                    <TouchableOpacity style={{ marginLeft: wp(3) }} onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>
+                    <TouchableOpacity style={{ marginLeft: wp(3) }} onPress={() => {navigation.dispatch(DrawerActions.toggleDrawer());Keyboard.dismiss()}}>
                         <Feather name="menu" size={hp(2.3
                         )} color={COLOR.white} style={{ marginRight: wp(2) }} />
                     </TouchableOpacity>
@@ -126,6 +127,8 @@ const Navigation = ({ navigation }) => {
 
 
             </Stack.Navigator>
+            <Toast />
+
         </NavigationContainer>
     );
 };

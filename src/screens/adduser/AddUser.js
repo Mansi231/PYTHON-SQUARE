@@ -1,6 +1,6 @@
 import Toast from 'react-native-toast-message';
 import React, { useContext, useState } from 'react';
-import { StyleSheet, Text, TextInput, View, TouchableOpacity, ToastAndroid, ActivityIndicator, Keyboard, FlatList } from 'react-native';
+import { StyleSheet, Text, TextInput, View, TouchableOpacity, ToastAndroid, ActivityIndicator, Keyboard, FlatList, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLOR } from '../../utils/color';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../../../pixel';
@@ -12,7 +12,7 @@ import auth from '@react-native-firebase/auth'
 import firestore from '@react-native-firebase/firestore';
 import { ValContext } from '../../context/Context';
 
-const AddUser = ({navigation}) => {
+const AddUser = ({ navigation }) => {
 
   const [showPassword, setShowPassword] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -75,26 +75,28 @@ const AddUser = ({navigation}) => {
     }
   };
 
-
   const validationSchema = yup.object().shape({
     userId: yup.string().required('User Id is required'),
     name: yup.string().required('Name is required'),
     password: yup.string().required('Password is required'),
   });
 
-  const renderUserItem = ({ item }) => {
-    console.log(item, ':: item ::');
-    return (
-      <View style={[styles.tabelRow]}>
-        <Text style={styles.cell}>{item.name}</Text>
-        <Text style={styles.cell}>{item.userId}</Text>
-        {/* Add more cells for other user information */}
-      </View>
-    )
-  };
+  const handlePerss = () =>{
+    navigation.goBack()
+  }
+
 
   return (
     <SafeAreaView style={{ flex: 1, paddingHorizontal: wp(4), backgroundColor: COLOR.screenBg }}>
+      <StatusBar translucent backgroundColor={COLOR.screenBg} barStyle={'dark-content'} />
+
+      <View style={styles?.heading}>
+        <TouchableOpacity activeOpacity={.5} onPress={handlePerss}>
+          <Feather name='chevron-left' size={hp(3)} color={COLOR.black} />
+        </TouchableOpacity>
+        <Text style={styles.addUserHeading}>Add User</Text>
+      </View>
+
       <Formik
         initialValues={{ userId: '', password: '', name: '' }}
         validationSchema={validationSchema}
@@ -102,28 +104,6 @@ const AddUser = ({navigation}) => {
       >
         {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
           <View style={styles.container}>
-
-            {/* Table Header */}
-            <View style={{ justifyContent: 'flex-start', flexDirection: 'column', width: '100%', gap: hp(.5) }}>
-              <View style={[styles.row, styles.header]}>
-                <Text style={styles.headerText}>Name</Text>
-                <Text style={styles.headerText}>User Id</Text>
-                {/* Add more headers for other user information */}
-              </View>
-
-              {/* User Data */}
-              {users != null && users?.length > 0 &&
-                <View style={styles.tabelBody}>
-                  <FlatList
-                    data={users}
-                    keyExtractor={(user) => user?.id?.toString()} // Assuming each user has a unique 'id'
-                    renderItem={renderUserItem}
-                    style={{ width: '100%' }}
-                  />
-                </View>
-              }
-            </View>
-
 
             <View style={styles.box}>
               <View style={[styles.inputContainer, styles.commonInputStyle]}>
@@ -203,18 +183,21 @@ export default AddUser;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: hp(3),
     backgroundColor: COLOR.screenBg,
     gap: hp(4)
   },
-  logoText: {
-    alignSelf: 'flex-end',
+  heading: {
+    position: 'absolute', top: hp(.8), zIndex: 1, paddingHorizontal: wp(4), right: 0, left: 0,
+    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
+  },
+  addUserHeading: {
     marginVertical: hp(3),
     fontFamily: FONTS.NunitoSemiBold,
     fontSize: hp(2.5),
-    color: COLOR.lightGrey70,
+    color: COLOR.black,letterSpacing:wp(.1),flexGrow:1,textAlign:'center'
 
   },
   loginText: {
@@ -271,9 +254,9 @@ const styles = StyleSheet.create({
   header: {
     width: '100%', paddingVertical: hp(1.5), paddingHorizontal: wp(3), flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', backgroundColor: COLOR.bgGrey, borderRadius: hp(.3), gap: wp(3)
   },
-  tabelBody:{backgroundColor:COLOR.bgLightGrey,width:'100%'},
+  tabelBody: { backgroundColor: COLOR.bgLightGrey, width: '100%' },
 
-  tabelRow:{backgroundColor:COLOR.bgLightGrey,flexDirection:'row',paddingVertical: hp(1.5),justifyContent:'space-around',gap:wp(1),borderBottomColor:COLOR.borderGrey,borderBottomWidth:hp(.2)},
-  cell:{color:COLOR.primaryBlue,fontFamily:FONTS.NunitoRegular,fontSize:hp(1.8)},
+  tabelRow: { backgroundColor: COLOR.bgLightGrey, flexDirection: 'row', paddingVertical: hp(1.5), justifyContent: 'space-around', gap: wp(1), borderBottomColor: COLOR.borderGrey, borderBottomWidth: hp(.2) },
+  cell: { color: COLOR.primaryBlue, fontFamily: FONTS.NunitoRegular, fontSize: hp(1.8) },
   headerText: { color: COLOR.black, fontFamily: FONTS.NunitoBold, fontSize: hp(2) },
 });

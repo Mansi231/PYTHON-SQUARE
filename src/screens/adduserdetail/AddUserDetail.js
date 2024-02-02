@@ -1,6 +1,6 @@
 import Toast from 'react-native-toast-message';
 import { StyleSheet, Text, TouchableOpacity, View, ScrollView, ToastAndroid, ActivityIndicator, StatusBar, Keyboard, TouchableWithoutFeedback, Alert } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../../../pixel'
 import { COLOR } from '../../utils/color'
 import { Formik } from 'formik'
@@ -12,32 +12,17 @@ import { FONTS } from '../../utils/fontFamily'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import TextInput from '../../components/common/TextInput'
 import firestore from '@react-native-firebase/firestore';
+import { ValContext } from '../../context/Context';
 
 const AddUserDetail = () => {
 
   const [open, setOpen] = useState(false)
   const [showDropdown, setShowDropdown] = useState(false);
-  // const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [scrollOffset, setScrollOffset] = useState(0);
+  const [statusBarHeight, setStatusBarHeight] = useState(0);
 
-  useEffect(() => {
-    // getUsers();
-  }, [])
-
-  const users = [
-    { label: 'Option 1', value: 1 },
-    { label: 'Option 2', value: 2 },
-    { label: 'Option 3', value: 3 },
-    { label: 'Option 3', value: 4 },
-    { label: 'Option 3', value: 5 },
-    { label: 'Option 3', value: 6 },
-    { label: 'Option 3', value: 7 },
-    { label: 'Option 3', value: 8 },
-    { label: 'Option 3', value: 9 },
-    { label: 'Option 3', value: 10 },
-    { label: 'Option 3', value: 11 },
-    { label: 'Option 3', value: 12 },
-  ];
+  const { users, setUsers } = useContext(ValContext)
 
   const getUsers = async () => {
     try {
@@ -111,8 +96,10 @@ const AddUserDetail = () => {
         text1: 'User detail added successfully.',
         visibilityTime: 3000,
         text1Style: { fontFamily: FONTS.NunitoMedium, fontSize: hp(1.3), color: COLOR.black, letterSpacing: wp(.1) },
-        swipeable: true
+        swipeable: true,
+        topOffset: scrollOffset + statusBarHeight,
       });
+
     } catch (error) {
       Toast.show({
         type: 'error',
@@ -120,6 +107,7 @@ const AddUserDetail = () => {
         visibilityTime: 3000,
         swipeable: true,
         text1Style: { fontFamily: FONTS.NunitoMedium, fontSize: hp(1.3), color: COLOR.black, letterSpacing: wp(.1) },
+        topOffset: scrollOffset + statusBarHeight,
       });
     } finally {
       Keyboard.dismiss()
@@ -158,6 +146,9 @@ const AddUserDetail = () => {
 
             <>
               <ScrollView
+                onScroll={(event) => {
+                  setScrollOffset(event.nativeEvent.contentOffset.y);
+                }}
                 nestedScrollEnabled={true}
                 showsVerticalScrollIndicator={false}
                 keyboardShouldPersistTaps="handled"
@@ -229,12 +220,12 @@ const AddUserDetail = () => {
                         placeholder={'Realised P&L '}
                         require={true}
                         keyboardType={'numeric'}
-                        onChangeText={(text) => setFieldValue('realised', { ...values?.realised, value: text })}
+                        onChangeText={(text) => setFieldValue('realised', { ...values?.realised, value: text.replace(',', '') })}
                         value={values?.realised?.value}
                         onBlur={handleBlur(`realised`)}
                       />
                       <Dropdown showDropdown={showDropdown} setShowDropdown={setShowDropdown} current={'realised'} options={fieldsOption} onSelect={(item) => {
-                        setFieldValue('realised', { ...values?.charges, type: item?.value })
+                        setFieldValue('realised', { ...values?.realised, type: item?.value })
                       }} value={values?.realised?.type || 'Select an option'} />
 
                     </View>
@@ -256,7 +247,7 @@ const AddUserDetail = () => {
                         placeholder={'Charges & Taxes '}
                         require={true}
                         keyboardType={'numeric'}
-                        onChangeText={(text) => setFieldValue('charges', { ...values?.charges, value: text })}
+                        onChangeText={(text) => setFieldValue('charges', { ...values?.charges, value: text.replace(',', '') })}
                         value={values?.charges?.value}
                         onBlur={handleBlur(`charges`)}
                       />
@@ -283,7 +274,7 @@ const AddUserDetail = () => {
                         placeholder={'Other credits & debits'}
                         require={true}
                         keyboardType={'numeric'}
-                        onChangeText={(text) => setFieldValue('credits', { ...values?.credits, value: text })}
+                        onChangeText={(text) => setFieldValue('credits', { ...values?.credits, value: text.replace(',', '') })}
                         value={values?.credits?.value}
                         onBlur={handleBlur(`credits`)}
                       />
@@ -310,7 +301,7 @@ const AddUserDetail = () => {
                         placeholder={'Net realised P&L'}
                         require={true}
                         keyboardType={'numeric'}
-                        onChangeText={(text) => setFieldValue('netRealised', { ...values?.netRealised, value: text })}
+                        onChangeText={(text) => setFieldValue('netRealised', { ...values?.netRealised, value: text.replace(',', '') })}
                         value={values?.netRealised?.value}
                         onBlur={handleBlur(`netRealised`)}
                       />
@@ -337,7 +328,7 @@ const AddUserDetail = () => {
                         placeholder={'Unrealised P&L'}
                         require={true}
                         keyboardType={'numeric'}
-                        onChangeText={(text) => setFieldValue('unrealised', { ...values?.unrealised, value: text })}
+                        onChangeText={(text) => setFieldValue('unrealised', { ...values?.unrealised, value: text.replace(',', '') })}
                         value={values?.unrealised?.value}
                         onBlur={handleBlur(`unrealised`)}
                       />
@@ -350,6 +341,7 @@ const AddUserDetail = () => {
                       <Text style={styles.errorText}>{errors.unrealised?.value}</Text>
                     )}
                   </View>
+
                   <Toast position='top' />
 
                   <TouchableOpacity style={[styles.button, styles.commonInputStyle]} onPress={handleSubmit}>

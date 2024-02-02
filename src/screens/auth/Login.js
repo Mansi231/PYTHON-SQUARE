@@ -1,5 +1,5 @@
 import Toast from 'react-native-toast-message';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { StyleSheet, Text, TextInput, View, TouchableOpacity, ActivityIndicator, ToastAndroid, StatusBar, Keyboard } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLOR } from '../../utils/color';
@@ -10,13 +10,17 @@ import { Formik } from 'formik'
 import * as yup from 'yup';
 import useAuth from '../../components/customhook/useAuth';
 import { ROUTES } from '../../../services/routes';
+import { setUser } from '../../asyncstorage/storage';
+import { ValContext } from '../../context/Context';
 
 const Login = ({ navigation }) => {
 
   const [showPassword, setShowPassword] = useState(true);
   const [loading, setLoading] = useState(false);
 
-  const { initializing, user, signIn } = useAuth();
+  const {  signIn } = useAuth();
+  const { setLoggedInUser } = useContext(ValContext)
+
 
   const handleLogin = async (values, { resetForm }) => {
     setLoading(true)
@@ -29,7 +33,9 @@ const Login = ({ navigation }) => {
       const userEmail = signedInUser.email;
 
       // Example: Check conditions based on the user's email
+      setLoggedInUser(signedInUser)
       if (userEmail === 'admin123@example.com') {
+        setUser(signedInUser)
         navigation.navigate(ROUTES.DRAWER);
       } else {
         navigation.navigate(ROUTES.DASHBOARD);

@@ -11,12 +11,10 @@ const Users = ({ navigation }) => {
     const { users, setUsers } = useContext(ValContext)
 
     const renderUserItem = ({ item }) => {
-        console.log(item, ':: item ::');
         return (
             <View style={[styles.tabelRow]}>
                 <Text style={styles.cell}>{item.name}</Text>
                 <Text style={styles.cell}>{item.userId}</Text>
-                {/* Add more cells for other user information */}
             </View>
         )
     };
@@ -69,6 +67,7 @@ const styles = StyleSheet.create({
         backgroundColor: COLOR.screenBg,
         gap: hp(4)
     },
+
 
     addUserBtn: { paddingHorizontal: wp(3), paddingVertical: hp(1.5), backgroundColor: COLOR.primaryBlue, alignSelf: 'flex-end', borderRadius: hp(.3) },
 

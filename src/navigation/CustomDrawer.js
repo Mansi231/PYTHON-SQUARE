@@ -7,12 +7,16 @@ import { FONTS } from '../utils/fontFamily'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import { ROUTES } from '../../services/routes'
 import useAuth from '../components/customhook/useAuth'
+import { ValContext } from '../context/Context'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const CustomDrawer = (props) => {
-    const { initializing, user, signIn, signOut } = useAuth();
+    const {signOut } = useAuth();
+    const { loggedInUser, setLoggedInUser } = useContext(ValContext)
 
     const handleLogout = async () => {
         try {
+            await AsyncStorage.clear();
             await signOut();
             props.navigation.replace(ROUTES.LOGIN);
         } catch (error) {
@@ -24,7 +28,7 @@ const CustomDrawer = (props) => {
         <View style={styles?.container}>
             <DrawerContentScrollView>
                 <View style={styles?.headerContainer}>
-                    <Text style={{ color: COLOR.black, fontSize: hp(2.2), fontFamily: FONTS.NunitoBold }}>{user?.email?.split('@')[0]} </Text>
+                    <Text style={{ color: COLOR.black, fontSize: hp(2.2), fontFamily: FONTS.NunitoBold }}>{loggedInUser?.email?.split('@')[0]} </Text>
                 </View>
 
                 <View style={{ paddingVertical: hp(2), }}>

@@ -18,7 +18,7 @@ const Dropdown = ({ options, onSelect, value, style, current, showDropdown, setS
     }
     return (
         <View style={[styles.container, style]}>
-            <TouchableOpacity onPress={handlePress } style={styles.header}>
+            <TouchableOpacity onPress={handlePress } activeOpacity={.5} style={styles.header}>
                 <Text style={styles.headerText}>{value}</Text>
             </TouchableOpacity>
 
@@ -88,8 +88,8 @@ const styles = StyleSheet.create({
         fontFamily: FONTS.NunitoMedium, textAlignVertical: 'center'
     },
     optionText: {
-        color: COLOR.textGrey,
-        fontSize: hp(1.9),
+        color: COLOR.black,
+        fontSize: hp(1.8),
         letterSpacing: wp(.2),
         fontFamily: FONTS.NunitoRegular
     },
