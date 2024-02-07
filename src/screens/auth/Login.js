@@ -133,25 +133,7 @@ const Login = ({ navigation }) => {
                 </TouchableOpacity>}
 
               />
-              {/* <View style={[styles.inputContainer, styles.commonInputStyle]}>
-                <TextInput
-                  placeholderTextColor={COLOR.textGrey}
-                  style={styles.input}
-                  placeholder="Password"
-                  secureTextEntry={showPassword ? true : false}
-                  onChangeText={handleChange('password')}
-                  onBlur={handleBlur('password')}
-                  value={values.password}
-                />
-                <TouchableOpacity onPress={() => setShowPassword(preVal => !preVal)}>
-                  <Feather
-                    name={showPassword ? 'eye-off' : 'eye'}
-                    size={hp(3)}
-                    color={COLOR.textGrey}
-                    style={styles.icon}
-                  />
-                </TouchableOpacity>
-              </View> */}
+
               {touched.password && errors.password && (
                 loading ? (
                   <ActivityIndicator color={COLOR.white} size={'large'} />

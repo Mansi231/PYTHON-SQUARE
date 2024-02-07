@@ -11,6 +11,7 @@ import * as yup from 'yup';
 import auth from '@react-native-firebase/auth'
 import firestore from '@react-native-firebase/firestore';
 import { ValContext } from '../../context/Context';
+import TextInputCommon from '../../components/common/TextInputFloating';
 
 const AddUser = ({ navigation }) => {
 
@@ -81,7 +82,7 @@ const AddUser = ({ navigation }) => {
     password: yup.string().required('Password is required'),
   });
 
-  const handlePerss = () =>{
+  const handlePerss = () => {
     navigation.goBack()
   }
 
@@ -106,59 +107,56 @@ const AddUser = ({ navigation }) => {
           <View style={styles.container}>
 
             <View style={styles.box}>
-              <View style={[styles.inputContainer, styles.commonInputStyle]}>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Name"
-                  onChangeText={handleChange('name')}
-                  onBlur={handleBlur('name')}
-                  value={values.name}
-                  placeholderTextColor={COLOR.textGrey}
-                />
-                <Feather name="edit-2" size={hp(2.2)} color={COLOR.textGrey} style={styles.icon} />
-              </View>
+              <TextInputCommon
+                keyboardType='default'
+                placeholderTextColor={COLOR.textGrey}
+                onChangeText={handleChange('name')}
+                value={values.name}
+                placeholder={'Name'}
+                onBlur={handleBlur('name')}
+                showIcon={(isFocused) => <Feather name="edit-2" size={hp(2.2)} color={isFocused ? COLOR.black : COLOR.textGrey} style={styles.icon} />}
+              />
+
               {touched.name && errors.name && (
                 <Text style={styles.errorText}>{errors.name}</Text>
               )}
             </View>
 
             <View style={styles.box}>
-              <View style={[styles.inputContainer, styles.commonInputStyle]}>
-                <TextInput
-                  style={styles.input}
-                  placeholder="User ID"
-                  onChangeText={handleChange('userId')}
-                  onBlur={handleBlur('userId')}
-                  value={values.userId}
-                  placeholderTextColor={COLOR.textGrey}
-                />
-                <Feather name="user" size={hp(2.3)} color={COLOR.textGrey} style={styles.icon} />
-              </View>
+              <TextInputCommon
+                keyboardType='default'
+                placeholderTextColor={COLOR.textGrey}
+                onChangeText={handleChange('userId')}
+                value={values.userId}
+                placeholder={'User ID'}
+                onBlur={handleBlur('userId')}
+                showIcon={(isFocused) => <Feather name="user" size={hp(2.3)} color={isFocused ? COLOR.black : COLOR.textGrey} style={styles.icon} />}
+              />
+
               {touched.userId && errors.userId && (
                 <Text style={styles.errorText}>{errors.userId}</Text>
               )}
             </View>
 
             <View style={styles.box}>
-              <View style={[styles.inputContainer, styles.commonInputStyle]}>
-                <TextInput
-                  placeholderTextColor={COLOR.textGrey}
-                  style={styles.input}
-                  placeholder="Password"
-                  secureTextEntry={showPassword ? true : false}
-                  onChangeText={handleChange('password')}
-                  onBlur={handleBlur('password')}
-                  value={values.password}
-                />
-                <TouchableOpacity onPress={() => setShowPassword(preVal => !preVal)}>
+              <TextInputCommon
+                keyboardType='default'
+                placeholderTextColor={COLOR.textGrey}
+                onChangeText={handleChange('password')}
+                value={values.password}
+                placeholder={'Password'}
+                onBlur={handleBlur('password')}
+                secureTextEntry={showPassword ? true : false}
+                showIcon={(isFocused) => <TouchableOpacity onPress={() => setShowPassword(preVal => !preVal)}>
                   <Feather
                     name={showPassword ? 'eye-off' : 'eye'}
                     size={hp(2.3)}
-                    color={COLOR.textGrey}
+                    color={isFocused ? COLOR.black : COLOR.textGrey}
                     style={styles.icon}
                   />
-                </TouchableOpacity>
-              </View>
+                </TouchableOpacity>}
+              />
+             
               {touched.password && errors.password && (
                 <Text style={styles.errorText}>{errors.password}</Text>
               )}
@@ -197,7 +195,7 @@ const styles = StyleSheet.create({
     marginVertical: hp(3),
     fontFamily: FONTS.NunitoSemiBold,
     fontSize: hp(2.5),
-    color: COLOR.black,letterSpacing:wp(.1),flexGrow:1,textAlign:'center'
+    color: COLOR.black, letterSpacing: wp(.1), flexGrow: 1, textAlign: 'center'
 
   },
   loginText: {

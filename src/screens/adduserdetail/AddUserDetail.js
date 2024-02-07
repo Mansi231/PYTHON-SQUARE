@@ -13,6 +13,8 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import TextInput from '../../components/common/TextInput'
 import firestore from '@react-native-firebase/firestore';
 import { ValContext } from '../../context/Context';
+import TextInputCommon from '../../components/common/TextInputFloating';
+import DropdownFloating from '../../components/common/DropDownFloating';
 
 const AddUserDetail = () => {
 
@@ -159,15 +161,13 @@ const AddUserDetail = () => {
                   {/* Date Picker */}
 
                   <View style={styles?.box}>
-                    <Text style={styles?.dateText}>
-                      Select Date
-                    </Text>
                     <TouchableOpacity
                       activeOpacity={1}
-                      style={[styles.datePickerViewStyle,]}
+                      style={[styles.datePickerViewStyle,{position:'relative'}]}
                       onPress={() => {
                         setOpen(!open);
                       }}>
+                        <Text style={{position:'absolute',top:-hp(1),backgroundColor:COLOR.screenBg,zIndex:1000,left:wp(1),paddingHorizontal:wp(1)}}>Select Date</Text>
                       <Text
                         style={[styles.datePickerStyle,]}>
                         {values?.selectedDate?.format('DD-MM-YYYY')}
@@ -194,12 +194,10 @@ const AddUserDetail = () => {
                   {/* Select user */}
 
                   <View style={styles?.box}>
-                    <Text style={styles?.dateText}>
-                      Select User
-                    </Text>
-                    <Dropdown showDropdown={showDropdown} setShowDropdown={setShowDropdown} current={'selectedUser'} style={{ width: 'auto' }} options={users} onSelect={(item) => {
+
+                    <DropdownFloating placeholder={'Select User'} showDropdown={showDropdown} setShowDropdown={setShowDropdown} current={'selectedUser'} style={{ width: 'auto' }} options={users} onSelect={(item) => {
                       setFieldValue('selectedUser', item)
-                    }} value={values?.selectedUser?.label || 'Select an option'} />
+                    }} value={values?.selectedUser?.label} />
 
                     {touched.selectedUser && errors.selectedUser && (
                       <Text style={styles.errorText}>{errors.selectedUser}</Text>
@@ -209,24 +207,22 @@ const AddUserDetail = () => {
                   {/* Realised P&L  */}
 
                   <View style={styles?.box}>
-                    <Text style={styles?.dateText}>
-                      Realised P&L
-                    </Text>
+
                     <View style={styles?.fieldBox}>
-                      <TextInput
+                      <TextInputCommon
                         onFocus={onFocus}
-                        style={[styles?.datePickerViewStyle]}
+                        style={[{ flexGrow: 1, width: 'auto' }]}
                         editable={true}
-                        placeholder={'Realised P&L '}
+                        placeholder={'Realised P&L'}
                         require={true}
                         keyboardType={'numeric'}
                         onChangeText={(text) => setFieldValue('realised', { ...values?.realised, value: text.replace(',', '') })}
                         value={values?.realised?.value}
                         onBlur={handleBlur(`realised`)}
                       />
-                      <Dropdown showDropdown={showDropdown} setShowDropdown={setShowDropdown} current={'realised'} options={fieldsOption} onSelect={(item) => {
+                      <DropdownFloating placeholder={'Select an option'} showDropdown={showDropdown} setShowDropdown={setShowDropdown} current={'realised'} options={fieldsOption} onSelect={(item) => {
                         setFieldValue('realised', { ...values?.realised, type: item?.value })
-                      }} value={values?.realised?.type || 'Select an option'} />
+                      }} value={values?.realised?.type} />
 
                     </View>
                     {touched.realised && errors.realised && (
@@ -236,13 +232,10 @@ const AddUserDetail = () => {
 
                   {/* Charges & Taxes */}
                   <View style={styles?.box}>
-                    <Text style={styles?.dateText}>
-                      Charges & Taxes
-                    </Text>
                     <View style={styles?.fieldBox}>
-                      <TextInput
+                      <TextInputCommon
                         onFocus={onFocus}
-                        style={[styles?.datePickerViewStyle]}
+                        style={[{ flexGrow: 1, width: 'auto' }]}
                         editable={true}
                         placeholder={'Charges & Taxes '}
                         require={true}
@@ -251,9 +244,9 @@ const AddUserDetail = () => {
                         value={values?.charges?.value}
                         onBlur={handleBlur(`charges`)}
                       />
-                      <Dropdown showDropdown={showDropdown} setShowDropdown={setShowDropdown} current={'charges'} options={fieldsOption} onSelect={(item) => {
+                      <DropdownFloating placeholder={'Select an option'} showDropdown={showDropdown} setShowDropdown={setShowDropdown} current={'charges'} options={fieldsOption} onSelect={(item) => {
                         setFieldValue('charges', { ...values?.charges, type: item?.value })
-                      }} value={values?.charges?.type || 'Select an option'} />
+                      }} value={values?.charges?.type} />
 
                     </View>
                     {touched.charges && errors.charges && (
@@ -263,13 +256,10 @@ const AddUserDetail = () => {
 
                   {/* Other credits & debits  */}
                   <View style={styles?.box}>
-                    <Text style={styles?.dateText}>
-                      Other credits & debits
-                    </Text>
                     <View style={styles?.fieldBox}>
-                      <TextInput
+                      <TextInputCommon
+                        style={[{ flexGrow: 1, width: 'auto' }]}
                         onFocus={onFocus}
-                        style={[styles?.datePickerViewStyle]}
                         editable={true}
                         placeholder={'Other credits & debits'}
                         require={true}
@@ -278,9 +268,9 @@ const AddUserDetail = () => {
                         value={values?.credits?.value}
                         onBlur={handleBlur(`credits`)}
                       />
-                      <Dropdown showDropdown={showDropdown} setShowDropdown={setShowDropdown} current={'credits'} options={fieldsOption} onSelect={(item) => {
+                      <DropdownFloating placeholder={'Select an option'} showDropdown={showDropdown} setShowDropdown={setShowDropdown} current={'credits'} options={fieldsOption} onSelect={(item) => {
                         setFieldValue('credits', { ...values?.credits, type: item?.value })
-                      }} value={values?.credits?.type || 'Select an option'} />
+                      }} value={values?.credits?.type} />
 
                     </View>
                     {touched.credits && errors.credits && (
@@ -290,13 +280,10 @@ const AddUserDetail = () => {
 
                   {/* Net realised P&L */}
                   <View style={styles?.box}>
-                    <Text style={styles?.dateText}>
-                      Net realised P&L
-                    </Text>
                     <View style={styles?.fieldBox}>
-                      <TextInput
+                      <TextInputCommon
+                        style={[{ flexGrow: 1, width: 'auto' }]}
                         onFocus={onFocus}
-                        style={[styles?.datePickerViewStyle]}
                         editable={true}
                         placeholder={'Net realised P&L'}
                         require={true}
@@ -305,9 +292,9 @@ const AddUserDetail = () => {
                         value={values?.netRealised?.value}
                         onBlur={handleBlur(`netRealised`)}
                       />
-                      <Dropdown showDropdown={showDropdown} setShowDropdown={setShowDropdown} current={'netRealised'} options={fieldsOption} onSelect={(item) => {
+                      <DropdownFloating placeholder={'Select an option'} showDropdown={showDropdown} setShowDropdown={setShowDropdown} current={'netRealised'} options={fieldsOption} onSelect={(item) => {
                         setFieldValue('netRealised', { ...values?.netRealised, type: item?.value })
-                      }} value={values?.netRealised?.type || 'Select an option'} />
+                      }} value={values?.netRealised?.type} />
 
                     </View>
                     {touched.netRealised && errors.netRealised && (
@@ -317,13 +304,10 @@ const AddUserDetail = () => {
 
                   {/* Unrealised P&L */}
                   <View style={styles?.box}>
-                    <Text style={styles?.dateText}>
-                      Unrealised P&L
-                    </Text>
                     <View style={styles?.fieldBox}>
-                      <TextInput
+                      <TextInputCommon
+                        style={[{ flexGrow: 1, width: 'auto' }]}
                         onFocus={onFocus}
-                        style={[styles?.datePickerViewStyle]}
                         editable={true}
                         placeholder={'Unrealised P&L'}
                         require={true}
@@ -332,9 +316,9 @@ const AddUserDetail = () => {
                         value={values?.unrealised?.value}
                         onBlur={handleBlur(`unrealised`)}
                       />
-                      <Dropdown showDropdown={showDropdown} setShowDropdown={setShowDropdown} current={'unrealised'} options={fieldsOption} onSelect={(item) => {
+                      <DropdownFloating placeholder={'Select an option'} showDropdown={showDropdown} setShowDropdown={setShowDropdown} current={'unrealised'} options={fieldsOption} onSelect={(item) => {
                         setFieldValue('unrealised', { ...values?.unrealised, type: item?.value })
-                      }} value={values?.unrealised?.type || 'Select an option'} />
+                      }} value={values?.unrealised?.type} />
 
                     </View>
                     {touched.unrealised && errors.unrealised && (

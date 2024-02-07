@@ -54,20 +54,20 @@ const TextInputCommon = ({
   };
 
   useEffect(() => {
-    if (value.length > 0) {
+    if (value?.length > 0) {
       startFloating()
     }
   }, [value])
 
   return (
-    <View style={[styles.inputContainer, styles.commonInputStyle, { borderColor: isFocused ? COLOR.black : COLOR.borderGrey }]}>
+    <View style={[styles.inputContainer, styles.commonInputStyle, { borderColor: isFocused ? COLOR.black : COLOR.borderGrey },style]}>
       <View style={[styles.mainView]}>
         <View style={[styles.PhoneNumberText,]}>
           <Animated.Text
             style={[
               styles.label,
-              (isFocused) && { color: COLOR.lightBlack, bottom: hp(2.5) },
-              (!isFocused && value )&& {bottom:hp(2.5)},
+              (isFocused) && { color: COLOR.lightBlack, bottom: hp(1.3) },
+              (!isFocused && value )&& {bottom:hp(1.7)},
               {
                 transform: [
                   {
@@ -87,7 +87,7 @@ const TextInputCommon = ({
             editable={editable}
             value={value}
             onChangeText={onChangeText}
-            style={[styles.text, { marginTop: hp(2), color: !isFocused && value ? COLOR.textGrey : COLOR.black }]}
+            style={[styles.text, {  color: !isFocused && value ? COLOR.textGrey : COLOR.black }]}
             onFocus={() => { handleFocus(); onFocus ? onFocus() : null }}
             onBlur={() => { handleBlur(); onBlur ? onBlur() : null }}
             placeholderTextColor={placeholderTextColor}
@@ -96,7 +96,7 @@ const TextInputCommon = ({
           />
         </View>
       </View>
-      {showIcon(isFocused)}
+      {showIcon && showIcon(isFocused)}
     </View>
   );
 };
@@ -113,14 +113,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor:'red'
   },
   text: {
     height: '100%',
     fontSize: hp(2.1),
     color: COLOR.borderLighGrey,
     width: '100%',
-    paddingHorizontal: wp(2),
+    paddingHorizontal: wp(1),
     fontFamily: FONTS.Avenir,
     color: COLOR.textGray,
     justifyContent: 'center',
@@ -135,8 +134,8 @@ const styles = StyleSheet.create({
   label: {
     position: 'absolute',
     left: 0,
-    bottom: hp(2),
-    fontSize: hp(2.1), fontFamily: FONTS.Avenir, color: COLOR.textGrey, textAlign: 'center', width: 'auto',
+    bottom: hp(1.1),
+    fontSize: hp(1.68), fontFamily: FONTS.NunitoMedium, color: COLOR.textGrey, textAlign: 'center', width: 'auto',
     paddingHorizontal: wp(1), flex: 1, height: hp(3.1), alignSelf: 'center', textAlignVertical: 'center',
     backgroundColor: COLOR.screenBg,
   },
@@ -145,14 +144,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     borderColor: COLOR.borderGrey,
-    borderWidth: hp(.23),
+    borderWidth: hp(.17),
 
   },
   commonInputStyle: {
-    borderRadius: hp(.5),
+    borderRadius: hp(.2),
     paddingHorizontal: wp(2),
     paddingRight: wp(3),
-    height: hp(7),
+    height: hp(6.4),
   },
 });
 
