@@ -25,6 +25,7 @@
     "react-native-collapsible": "^1.6.1",
     "react-native-date-picker": "^4.3.5",
     "react-native-dotenv": "^3.4.9",
+    "react-native-floating-label-inputs": "^0.0.4",
     "react-native-gesture-handler": "^2.14.1",
     "react-native-linear-gradient": "^2.8.3",
     "react-native-reanimated": "^3.6.2",

@@ -1,6 +1,6 @@
 import Toast from 'react-native-toast-message';
 import React, { useContext, useState } from 'react';
-import { StyleSheet, Text, TextInput, View, TouchableOpacity, ActivityIndicator, ToastAndroid, StatusBar, Keyboard } from 'react-native';
+import { StyleSheet, Text, TextInput, View, TouchableOpacity, ActivityIndicator, ToastAndroid, StatusBar, Keyboard, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLOR } from '../../utils/color';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../../../pixel';
@@ -12,13 +12,15 @@ import useAuth from '../../components/customhook/useAuth';
 import { ROUTES } from '../../../services/routes';
 import { setUser } from '../../asyncstorage/storage';
 import { ValContext } from '../../context/Context';
+import logo from '../../assets/logo.png'
+import TextInputCommon from '../../components/common/TextInputFloating';
 
 const Login = ({ navigation }) => {
 
   const [showPassword, setShowPassword] = useState(true);
   const [loading, setLoading] = useState(false);
 
-  const {  signIn } = useAuth();
+  const { signIn } = useAuth();
   const { setLoggedInUser } = useContext(ValContext)
 
 
@@ -48,8 +50,8 @@ const Login = ({ navigation }) => {
           type: 'error',
           text1: 'Invalid Credential .',
           visibilityTime: 3000,
-          text1Style:{fontFamily:FONTS.NunitoMedium,fontSize:hp(1.3),color:COLOR.black,letterSpacing:wp(.1)},
-          swipeable:true
+          text1Style: { fontFamily: FONTS.NunitoMedium, fontSize: hp(1.3), color: COLOR.black, letterSpacing: wp(.1) },
+          swipeable: true
         });
 
       }
@@ -58,8 +60,8 @@ const Login = ({ navigation }) => {
           type: 'error',
           text1: `${error}`,
           visibilityTime: 3000,
-          swipeable:true,
-          text1Style:{fontFamily:FONTS.NunitoMedium,fontSize:hp(1.3),color:COLOR.black,letterSpacing:wp(.1)},
+          swipeable: true,
+          text1Style: { fontFamily: FONTS.NunitoMedium, fontSize: hp(1.3), color: COLOR.black, letterSpacing: wp(.1) },
         });
       }
     } finally {
@@ -76,14 +78,17 @@ const Login = ({ navigation }) => {
   });
 
   return (
-    <SafeAreaView style={{ flex: 1, paddingHorizontal: wp(4), backgroundColor: COLOR.screenBg, justifyContent: 'center' }}>
+    <SafeAreaView style={{ flex: 1, paddingHorizontal: wp(4), backgroundColor: COLOR.screenBg, justifyContent: 'center', position: 'relative' }}>
       <StatusBar translucent backgroundColor={COLOR.screenBg} barStyle={'dark-content'} />
 
       <View style={styles?.header}>
-        <Text style={styles.logoText}>PythonSquare</Text>
-
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
+          <Feather name='arrow-left' size={hp(2.5)} color={COLOR.black} />
+          <Image source={logo} style={{ height: hp(7), width: hp(7), alignSelf: 'flex-end', }} resizeMode='contain' />
+        </View>
         <Text style={styles.loginText}>Login</Text>
       </View>
+
       <Formik
         initialValues={{ userId: '', password: '' }}
         validationSchema={validationSchema}
@@ -91,26 +96,44 @@ const Login = ({ navigation }) => {
       >
         {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
           <View style={styles.container}>
-
             <View style={styles.box}>
-              <View style={[styles.inputContainer, styles.commonInputStyle]}>
-                <TextInput
-                  placeholderTextColor={COLOR.textGrey}
-                  style={styles.input}
-                  placeholder="User ID"
-                  onChangeText={handleChange('userId')}
-                  onBlur={handleBlur('userId')}
-                  value={values.userId}
-                />
-                <Feather name="user" size={hp(3)} color={COLOR.textGrey} style={styles.icon} />
-              </View>
+
+              <TextInputCommon
+                keyboardType='default'
+                placeholderTextColor={COLOR.textGrey}
+                onChangeText={handleChange('userId')}
+                value={values.userId}
+                placeholder={'User ID'}
+                onBlur={handleBlur('userId')}
+                showIcon={(isFocused) => <Feather name="user" size={hp(3)} color={isFocused ? COLOR.black : COLOR.textGrey} style={styles.icon} />}
+              />
+
               {touched.userId && errors.userId && (
                 <Text style={styles.errorText}>{errors.userId}</Text>
               )}
             </View>
 
             <View style={styles.box}>
-              <View style={[styles.inputContainer, styles.commonInputStyle]}>
+              <TextInputCommon
+                keyboardType='default'
+                placeholderTextColor={COLOR.textGrey}
+                style={styles.input}
+                placeholder="Password"
+                secureTextEntry={showPassword ? true : false}
+                onChangeText={handleChange('password')}
+                onBlur={handleBlur('password')}
+                value={values.password}
+                showIcon={(isFocused) => <TouchableOpacity onPress={() => setShowPassword(preVal => !preVal)}>
+                  <Feather
+                    name={showPassword ? 'eye-off' : 'eye'}
+                    size={hp(3)}
+                    color={isFocused ? COLOR.black : COLOR.textGrey}
+                    style={styles.icon}
+                  />
+                </TouchableOpacity>}
+
+              />
+              {/* <View style={[styles.inputContainer, styles.commonInputStyle]}>
                 <TextInput
                   placeholderTextColor={COLOR.textGrey}
                   style={styles.input}
@@ -128,7 +151,7 @@ const Login = ({ navigation }) => {
                     style={styles.icon}
                   />
                 </TouchableOpacity>
-              </View>
+              </View> */}
               {touched.password && errors.password && (
                 loading ? (
                   <ActivityIndicator color={COLOR.white} size={'large'} />
@@ -136,7 +159,7 @@ const Login = ({ navigation }) => {
                   (<Text style={styles.errorText}>{errors.password}</Text>)
               )}
             </View>
-            <Toast position='top'/>
+            <Toast position='top' />
 
             <TouchableOpacity style={[styles.button, styles.commonInputStyle]} onPress={handleSubmit}>
               {loading ? (
@@ -147,6 +170,13 @@ const Login = ({ navigation }) => {
           </View>
         )}
       </Formik>
+
+      <View style={styles?.bottomBox}>
+        <Text style={styles.bottomLogoText}>pythonsquare</Text>
+        <Text style={styles.bottomText}>Systems Works - People Fail
+          Automated System to takes on your quantity
+          Best ALTerding to fix deposit of minimum risk with backtest result</Text>
+      </View>
     </SafeAreaView>
   );
 };
@@ -164,7 +194,7 @@ const styles = StyleSheet.create({
     gap: hp(4)
   },
   header: {
-    position: 'absolute', top: 0, zIndex: 1, paddingHorizontal: wp(4), right: 0, left: 0
+    position: 'absolute', top: hp(3), zIndex: 1, paddingHorizontal: wp(4), right: 0, left: 0
   },
   logoText: {
     alignSelf: 'flex-end',
@@ -177,7 +207,6 @@ const styles = StyleSheet.create({
     fontSize: hp(3),
     color: COLOR.lightBlack,
     fontFamily: FONTS.NunitoMedium,
-    marginBottom: hp(4),
     marginTop: hp(4)
   },
   inputContainer: {
@@ -222,5 +251,8 @@ const styles = StyleSheet.create({
     height: hp(7),
   },
   box: { display: 'flex', flexDirection: 'column', gap: hp(1) },
-  errorText: { color: COLOR.errorColor, fontSize: hp(2), fontFamily: FONTS.NunitoRegular }
+  errorText: { color: COLOR.errorColor, fontSize: hp(2), fontFamily: FONTS.NunitoRegular },
+  bottomBox: { width: '100%', flexDirection: 'column', gap: hp(1), justifyContent: 'flex-start', alignItems: 'flex-start', paddingBottom: hp(7) },
+  bottomLogoText: { color: COLOR.textGrey, fontFamily: FONTS.NunitoSemiBold, fontSize: hp(2.1), letterSpacing: wp(.1), textTransform: 'uppercase', textAlign: 'left' },
+  bottomText: { color: COLOR.textGrey, fontFamily: FONTS.NunitoRegular, fontSize: hp(1.7), letterSpacing: wp(.1), textAlign: 'left' }
 });
