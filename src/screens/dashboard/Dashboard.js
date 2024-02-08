@@ -73,6 +73,7 @@ const Dashboard = ({ navigation }) => {
     }
   };
 
+
   return (
     <SafeAreaView style={[{ flex: 1, paddingHorizontal: wp(4), backgroundColor: COLOR.screenBg }, styles?.container]}>
 

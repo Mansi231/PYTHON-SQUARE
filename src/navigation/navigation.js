@@ -20,6 +20,7 @@ import Dashboard from '../screens/dashboard/Dashboard';
 import Feather from 'react-native-vector-icons/Feather'
 import Users from '../screens/users/Users';
 import AddUserInfo from '../screens/adduserdetail/AddUserInfo';
+import Home from '../screens/dashboard/Home';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -117,7 +118,7 @@ const Navigation = ({ navigation }) => {
                 />
                 <Stack.Screen
                     name={ROUTES.DASHBOARD}
-                    component={Dashboard}
+                    component={Home}
                     options={{ headerShown: false }}
                 />
                 <Stack.Screen
