@@ -18,7 +18,20 @@ const Home = ({ navigation }) => {
 
     const [open, setOpen] = useState(false)
     const [selectedYear, setSelectedYear] = useState(moment().get('year'))
-    const [userDetails, setUserDetails] = useState(null);
+    const [userDetails, setUserDetails] = useState([
+        { month: 'January', data: [], invest: 0, profit: 0, loss: 0, return: 0 },
+        { month: 'February', data: [], invest: 0, profit: 0, loss: 0, return: 0 },
+        { month: 'March', data: [], invest: 0, profit: 0, loss: 0, return: 0 },
+        { month: 'April', data: [], invest: 0, profit: 0, loss: 0, return: 0 },
+        { month: 'May', data: [], invest: 0, profit: 0, loss: 0, return: 0 },
+        { month: 'June', data: [], invest: 0, profit: 0, loss: 0, return: 0 },
+        { month: 'July', data: [], invest: 0, profit: 0, loss: 0, return: 0 },
+        { month: 'August', data: [], invest: 0, profit: 0, loss: 0, return: 0 },
+        { month: 'September', data: [], invest: 0, profit: 0, loss: 0, return: 0 },
+        { month: 'October', data: [], invest: 0, profit: 0, loss: 0, return: 0 },
+        { month: 'November', data: [], invest: 0, profit: 0, loss: 0, return: 0 },
+        { month: 'December', data: [], invest: 0, profit: 0, loss: 0, return: 0 },
+    ]);
 
     const { signOut } = useAuth();
     const { loggedInUser, setLoggedInUser } = useContext(ValContext)
@@ -31,27 +44,32 @@ const Home = ({ navigation }) => {
                 .doc(loggedInUser?.uid)
                 .collection(`${year}`);
 
-            const querySnapshot = await userDetailDocRef.get();
-            const dataArray = [];
-
-            // Iterate over each month within the year collection
-            querySnapshot.forEach(async (monthDoc) => {
-                const month = monthDoc.id;
-                const monthData = [];
-
-                // Fetch documents within the current month
-                const monthQuerySnapshot = await monthDoc.ref.collection(month).get();
-
-                monthQuerySnapshot.forEach((doc) => {
-                    // Push data of each document within the month to monthData array
-                    monthData.push(doc.data());
+            const userDetailsByMonth = [
+                { month: 'January', data: [], invest: 0, profit: 0, loss: 0, return: 0 },
+                { month: 'February', data: [], invest: 0, profit: 0, loss: 0, return: 0 },
+                { month: 'March', data: [], invest: 0, profit: 0, loss: 0, return: 0 },
+                { month: 'April', data: [], invest: 0, profit: 0, loss: 0, return: 0 },
+                { month: 'May', data: [], invest: 0, profit: 0, loss: 0, return: 0 },
+                { month: 'June', data: [], invest: 0, profit: 0, loss: 0, return: 0 },
+                { month: 'July', data: [], invest: 0, profit: 0, loss: 0, return: 0 },
+                { month: 'August', data: [], invest: 0, profit: 0, loss: 0, return: 0 },
+                { month: 'September', data: [], invest: 0, profit: 0, loss: 0, return: 0 },
+                { month: 'October', data: [], invest: 0, profit: 0, loss: 0, return: 0 },
+                { month: 'November', data: [], invest: 0, profit: 0, loss: 0, return: 0 },
+                { month: 'December', data: [], invest: 0, profit: 0, loss: 0, return: 0 },
+            ];
+            await userDetailDocRef.get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    const monthName = moment(doc.data()?.selectedDate, 'YYYY-MM-DD').format('MMMM');
+                    console.log(doc.data());
+                    const monthIndex = moment(doc.data()?.selectedDate, 'YYYY-MM-DD').month();
+                    userDetailsByMonth[monthIndex]?.data.push(doc.data());
                 });
-
-                // Push monthData array to dataArray for each month
-                dataArray.push({ month, data: monthData });
+            }).catch((error) => {
+                console.error('Error getting documents: ', error);
             });
 
-            setUserDetails(dataArray);
+            setUserDetails(userDetailsByMonth);
         } catch (error) {
             console.error('Error fetching user details:', error);
         }
@@ -72,6 +90,10 @@ const Home = ({ navigation }) => {
             console.error('Error signing out:', error);
         }
     };
+
+    const totalInvestment = () => {
+
+    }
 
     return (
         <SafeAreaView style={[{ flex: 1, paddingHorizontal: wp(4), backgroundColor: COLOR.screenBg }, styles?.container]}>
@@ -115,11 +137,34 @@ const Home = ({ navigation }) => {
                     {
                         userDetails != null ?
                             userDetails?.map((item, index) => {
-                                const date = moment(item.selectedDate, 'YYYY-MM-DD');
-                                const monthName = date.format('MMMMM');
+
+                                const totalInvestment = item.data.reduce((acc, curr) => acc + (Number(curr.invested_amount) || 0), 0);
+
+                                const totalProfit = item?.data?.filter(({ type }, index) => type == 'profit')?.reduce((acc, curr) => acc + (Number(curr.profit_amount) || 0), 0);
+
+                                const totalLoss = item?.data?.filter(({ type }, index) => type == 'loss')?.reduce((acc, curr) => acc + (Number(curr.profit_amount) || 0), 0);
+
+                                const totalReturn = totalProfit - totalLoss;
+
+                                const returnPercentage = totalReturn !== 0 ? ((totalReturn / totalInvestment) * 100).toFixed(2) : 'N/A';
+
+
                                 return (
-                                    <View style={styles?.dataCard}>
-                                        <Text>{monthName}</Text>
+                                    <View style={styles?.dataCard} key={index}>
+                                        <Text style={{ color: COLOR.black, fontSize: hp(1.7) }}>{item.month}</Text>
+                                        <Text>
+                                            Invest : <Text>{totalInvestment}</Text>
+                                        </Text>
+                                        <Text>
+                                            Profit : <Text>{totalProfit}</Text>
+                                        </Text>
+                                        <Text>
+                                            Loss : <Text>{totalLoss}</Text>
+                                        </Text>
+                                        <Text>
+                                            return : <Text>{returnPercentage}</Text>
+                                        </Text>
+
                                     </View>
                                 )
                             })
@@ -181,7 +226,7 @@ const styles = StyleSheet.create({
     },
     dataCard: {
         height: hp(20), width: '48%', flexDirection: 'column',
-        alignItems: 'flex-start', justifyContent: 'center', backgroundColor: COLOR.white,
+        alignItems: 'center', justifyContent: 'flex-start', backgroundColor: COLOR.white,
         gap: hp(2),
         borderRadius: hp(.8),
         paddingHorizontal: wp(5),

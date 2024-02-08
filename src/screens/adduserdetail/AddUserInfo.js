@@ -39,10 +39,9 @@ const AddUserInfo = () => {
 
     const handleAddUserInfo = async (values) => {
 
-        let returnValue = calculateROI(values?.invested_amount, values?.profit_amount, values?.type)
+        let returnValue = calculateROI(values?.invested_amount,values?.profit_amount,values?.type)
 
         let year = values?.selectedDate?.get('year')
-        let month = values?.selectedDate?.format('MMMM');
 
         try {
             setLoading(true);
@@ -51,8 +50,6 @@ const AddUserInfo = () => {
                 .collection('userDetail')
                 .doc(values.selectedUser.id)
                 .collection(`${year}`)
-                .doc(`${month}`)
-                .collection('details')
                 .doc(values.selectedDate.format('YYYY-MM-DD'));
 
             const existingDoc = await userDetailDocRef.get();
@@ -65,7 +62,7 @@ const AddUserInfo = () => {
                     type: values.type,
                     selectedDate: moment(values.selectedDate).format('YYYY-MM-DD'),
                     selectedUser: values.selectedUser,
-                    return: returnValue
+                    return:returnValue
                 });
             } else {
                 // If the document doesn't exist, add a new one
@@ -75,7 +72,7 @@ const AddUserInfo = () => {
                     type: values.type,
                     selectedDate: moment(values.selectedDate).format('YYYY-MM-DD'),
                     selectedUser: values.selectedUser,
-                    return: returnValue
+                    return:returnValue
                 });
             }
             Toast.show({
