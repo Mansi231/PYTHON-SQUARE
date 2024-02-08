@@ -113,7 +113,7 @@ const AddUser = ({ navigation }) => {
                 onChangeText={handleChange('name')}
                 value={values.name}
                 placeholder={'Name'}
-                onBlur={handleBlur('name')}
+                onBlur={()=>handleBlur('name')}
                 showIcon={(isFocused) => <Feather name="edit-2" size={hp(2.2)} color={isFocused ? COLOR.black : COLOR.textGrey} style={styles.icon} />}
               />
 
@@ -129,7 +129,7 @@ const AddUser = ({ navigation }) => {
                 onChangeText={handleChange('userId')}
                 value={values.userId}
                 placeholder={'User ID'}
-                onBlur={handleBlur('userId')}
+                onBlur={()=>handleBlur('userId')}
                 showIcon={(isFocused) => <Feather name="user" size={hp(2.3)} color={isFocused ? COLOR.black : COLOR.textGrey} style={styles.icon} />}
               />
 
@@ -145,7 +145,7 @@ const AddUser = ({ navigation }) => {
                 onChangeText={handleChange('password')}
                 value={values.password}
                 placeholder={'Password'}
-                onBlur={handleBlur('password')}
+                onBlur={()=>handleBlur('password')}
                 secureTextEntry={showPassword ? true : false}
                 showIcon={(isFocused) => <TouchableOpacity onPress={() => setShowPassword(preVal => !preVal)}>
                   <Feather

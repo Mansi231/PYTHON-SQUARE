@@ -79,7 +79,7 @@ const DropdownFloating = ({ options, onSelect, value, style, current, showDropdo
                 >
                     {placeholder}
                 </Animated.Text>
-                <Text style={[styles.headerText,(!(showDropdown === current) && value)&&{color:COLOR.textGrey}]}>{value}</Text>
+                <Text style={[styles.headerText, (!(showDropdown === current) && value) && { color: COLOR.textGrey }]}>{value}</Text>
             </TouchableOpacity>
 
             {showDropdown === current && (

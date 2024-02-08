@@ -66,13 +66,12 @@ const TextInputCommon = ({
           <Animated.Text
             style={[
               styles.label,
-              (isFocused) && { color: COLOR.lightBlack, bottom: hp(1.3) },
-              (!isFocused && value )&& {bottom:hp(1.7)},
+              (isFocused) && { color: COLOR.lightBlack },
               {
                 transform: [
                   {
                     translateY: translateY.interpolate({
-                      inputRange: [-hp(2.1), 0],
+                      inputRange: [-hp(1.9), 0],
                       outputRange: [-hp(2), 0],
                     }),
                   },
@@ -134,7 +133,7 @@ const styles = StyleSheet.create({
   label: {
     position: 'absolute',
     left: 0,
-    bottom: hp(1.1),
+    // bottom: hp(1.1),
     fontSize: hp(1.68), fontFamily: FONTS.NunitoMedium, color: COLOR.textGrey, textAlign: 'center', width: 'auto',
     paddingHorizontal: wp(1), flex: 1, height: hp(3.1), alignSelf: 'center', textAlignVertical: 'center',
     backgroundColor: COLOR.screenBg,

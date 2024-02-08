@@ -37,12 +37,14 @@ const Login = ({ navigation }) => {
       // Example: Check conditions based on the user's email
       setLoggedInUser(signedInUser)
       if (userEmail === 'admin123@example.com') {
-        setUser(signedInUser)
+
         navigation.navigate(ROUTES.DRAWER);
       } else {
         navigation.navigate(ROUTES.DASHBOARD);
       }
-
+      if (userEmail) {
+        setUser(signedInUser)
+      }
     } catch (error) {
       if (error?.code === 'auth/invalid-email' || error?.code === 'auth/invalid-credential') {
         console.log('errror in user iddddd')
@@ -104,8 +106,8 @@ const Login = ({ navigation }) => {
                 onChangeText={handleChange('userId')}
                 value={values.userId}
                 placeholder={'User ID'}
-                onBlur={handleBlur('userId')}
-                showIcon={(isFocused) => <Feather name="user" size={hp(3)} color={isFocused ? COLOR.black : COLOR.textGrey} style={styles.icon} />}
+                onBlur={() => handleBlur('userId')}
+                showIcon={(isFocused) => <Feather name="user" size={hp(2.6)} color={isFocused ? COLOR.black : COLOR.textGrey} style={styles.icon} />}
               />
 
               {touched.userId && errors.userId && (
@@ -117,16 +119,15 @@ const Login = ({ navigation }) => {
               <TextInputCommon
                 keyboardType='default'
                 placeholderTextColor={COLOR.textGrey}
-                style={styles.input}
                 placeholder="Password"
                 secureTextEntry={showPassword ? true : false}
                 onChangeText={handleChange('password')}
-                onBlur={handleBlur('password')}
+                onBlur={() => handleBlur('password')}
                 value={values.password}
                 showIcon={(isFocused) => <TouchableOpacity onPress={() => setShowPassword(preVal => !preVal)}>
                   <Feather
                     name={showPassword ? 'eye-off' : 'eye'}
-                    size={hp(3)}
+                    size={hp(2.5)}
                     color={isFocused ? COLOR.black : COLOR.textGrey}
                     style={styles.icon}
                   />
@@ -176,7 +177,7 @@ const styles = StyleSheet.create({
     gap: hp(4)
   },
   header: {
-    position: 'absolute', top: hp(3), zIndex: 1, paddingHorizontal: wp(4), right: 0, left: 0
+    position: 'absolute', top: StatusBar.currentHeight, zIndex: 1, paddingHorizontal: wp(4), right: 0, left: 0
   },
   logoText: {
     alignSelf: 'flex-end',

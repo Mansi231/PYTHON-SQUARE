@@ -19,6 +19,7 @@ import AddUserDetail from '../screens/adduserdetail/AddUserDetail';
 import Dashboard from '../screens/dashboard/Dashboard';
 import Feather from 'react-native-vector-icons/Feather'
 import Users from '../screens/users/Users';
+import AddUserInfo from '../screens/adduserdetail/AddUserInfo';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -26,10 +27,10 @@ const Drawer = createDrawerNavigator();
 const DrawerScreen = ({ navigation }) => {
 
     const routes = [
-        { name: ROUTES.ADD_USER_DETAIL, icon: 'edit-3', iconBorder: true, component: AddUserDetail, title: 'Add User Detail' },
+        { name: ROUTES.ADD_USER_INFO, icon: 'edit-3', iconBorder: true, component: AddUserInfo, title: 'Add User Detail' },
         { name: ROUTES.USERS, icon: 'user-plus', component: Users, title: 'Users' },
+        // { name: ROUTES.ADD_USER_DETAIL, icon: 'edit-3', iconBorder: true, component: AddUserDetail, title: 'Add User Detail' },
     ];
-
 
     const focusEffectCallback = useCallback(() => {
         const backHandler = removeBackHandler();

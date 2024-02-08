@@ -26,17 +26,6 @@ const AddUserDetail = () => {
 
   const { users, setUsers } = useContext(ValContext)
 
-  const getUsers = async () => {
-    try {
-      const querySnapshot = await firestore().collection('users').where('role', '!=', 'admin').get();
-      const users = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data(), label: doc.data().name, value: doc.id, }));
-      setUsers(users)
-    } catch (error) {
-      console.log(error, ':: error while fetching users ::')
-    }
-
-  }
-
   const validationSchema = yup.object().shape({
     selectedDate: yup.date().required('Target Date is required'),
     selectedUser: yup.object().nullable().required('Please select user'),
@@ -154,7 +143,7 @@ const AddUserDetail = () => {
                 nestedScrollEnabled={true}
                 showsVerticalScrollIndicator={false}
                 keyboardShouldPersistTaps="handled"
-                contentContainerStyle={{ flexGrow: 1, paddingBottom: hp(15) }} style={{ width: '100%' }}>
+                contentContainerStyle={{ flexGrow: 1, paddingBottom: hp(15), paddingTop: hp(1) }} style={{ width: '100%' }}>
 
                 <View style={styles.container}>
 
@@ -163,13 +152,13 @@ const AddUserDetail = () => {
                   <View style={styles?.box}>
                     <TouchableOpacity
                       activeOpacity={1}
-                      style={[styles.datePickerViewStyle,{position:'relative'}]}
+                      style={[styles.datePickerViewStyle, open && { borderColor: COLOR.black }]}
                       onPress={() => {
                         setOpen(!open);
                       }}>
-                        <Text style={{position:'absolute',top:-hp(1),backgroundColor:COLOR.screenBg,zIndex:1000,left:wp(1),paddingHorizontal:wp(1)}}>Select Date</Text>
+                      <Text style={[styles.dateLabelText, open && { color: COLOR.black }]}>Select Date</Text>
                       <Text
-                        style={[styles.datePickerStyle,]}>
+                        style={[styles.datePickerStyle, open && { color: COLOR.black }]}>
                         {values?.selectedDate?.format('DD-MM-YYYY')}
                       </Text>
                     </TouchableOpacity>
@@ -218,7 +207,7 @@ const AddUserDetail = () => {
                         keyboardType={'numeric'}
                         onChangeText={(text) => setFieldValue('realised', { ...values?.realised, value: text.replace(',', '') })}
                         value={values?.realised?.value}
-                        onBlur={handleBlur(`realised`)}
+                        onBlur={() => handleBlur(`realised`)}
                       />
                       <DropdownFloating placeholder={'Select an option'} showDropdown={showDropdown} setShowDropdown={setShowDropdown} current={'realised'} options={fieldsOption} onSelect={(item) => {
                         setFieldValue('realised', { ...values?.realised, type: item?.value })
@@ -242,7 +231,7 @@ const AddUserDetail = () => {
                         keyboardType={'numeric'}
                         onChangeText={(text) => setFieldValue('charges', { ...values?.charges, value: text.replace(',', '') })}
                         value={values?.charges?.value}
-                        onBlur={handleBlur(`charges`)}
+                        onBlur={() => handleBlur(`charges`)}
                       />
                       <DropdownFloating placeholder={'Select an option'} showDropdown={showDropdown} setShowDropdown={setShowDropdown} current={'charges'} options={fieldsOption} onSelect={(item) => {
                         setFieldValue('charges', { ...values?.charges, type: item?.value })
@@ -266,7 +255,7 @@ const AddUserDetail = () => {
                         keyboardType={'numeric'}
                         onChangeText={(text) => setFieldValue('credits', { ...values?.credits, value: text.replace(',', '') })}
                         value={values?.credits?.value}
-                        onBlur={handleBlur(`credits`)}
+                        onBlur={() => handleBlur(`credits`)}
                       />
                       <DropdownFloating placeholder={'Select an option'} showDropdown={showDropdown} setShowDropdown={setShowDropdown} current={'credits'} options={fieldsOption} onSelect={(item) => {
                         setFieldValue('credits', { ...values?.credits, type: item?.value })
@@ -290,7 +279,7 @@ const AddUserDetail = () => {
                         keyboardType={'numeric'}
                         onChangeText={(text) => setFieldValue('netRealised', { ...values?.netRealised, value: text.replace(',', '') })}
                         value={values?.netRealised?.value}
-                        onBlur={handleBlur(`netRealised`)}
+                        onBlur={() => handleBlur(`netRealised`)}
                       />
                       <DropdownFloating placeholder={'Select an option'} showDropdown={showDropdown} setShowDropdown={setShowDropdown} current={'netRealised'} options={fieldsOption} onSelect={(item) => {
                         setFieldValue('netRealised', { ...values?.netRealised, type: item?.value })
@@ -314,7 +303,7 @@ const AddUserDetail = () => {
                         keyboardType={'numeric'}
                         onChangeText={(text) => setFieldValue('unrealised', { ...values?.unrealised, value: text.replace(',', '') })}
                         value={values?.unrealised?.value}
-                        onBlur={handleBlur(`unrealised`)}
+                        onBlur={() => handleBlur(`unrealised`)}
                       />
                       <DropdownFloating placeholder={'Select an option'} showDropdown={showDropdown} setShowDropdown={setShowDropdown} current={'unrealised'} options={fieldsOption} onSelect={(item) => {
                         setFieldValue('unrealised', { ...values?.unrealised, type: item?.value })
@@ -366,7 +355,7 @@ const styles = StyleSheet.create({
   },
   datePickerStyle: {
     fontSize: hp(1.68),
-    color: COLOR.primaryBlue,
+    color: COLOR.textGrey,
     paddingHorizontal: wp(2.6),
     paddingVertical: hp(1.1),
     letterSpacing: 1,
@@ -376,6 +365,8 @@ const styles = StyleSheet.create({
     color: COLOR.textGrey, fontFamily: FONTS.NunitoRegular,
     fontSize: hp(1.6), textAlignVertical: 'center'
   },
+  dateLabelText: { position: 'absolute', top: -hp(1.35), backgroundColor: COLOR.screenBg, zIndex: 9000, left: wp(1), paddingHorizontal: wp(1), color: COLOR.textGrey, fontFamily: FONTS.NunitoMedium, fontSize: hp(1.68), },
+
   box: { width: '100%', display: 'flex', flexDirection: 'column', gap: hp(1.5) },
   fieldBox: { display: 'flex', flexDirection: 'row', justifyContent: 'space-between', gap: wp(3) },
 

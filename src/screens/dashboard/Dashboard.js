@@ -18,7 +18,7 @@ const Dashboard = ({ navigation }) => {
   const [selectedDate, setSelectedDate] = useState(moment())
   const [userDetails, setUserDetails] = useState(null);
 
-  const {signOut } = useAuth();
+  const { signOut } = useAuth();
   const { loggedInUser, setLoggedInUser } = useContext(ValContext)
 
 
@@ -89,17 +89,15 @@ const Dashboard = ({ navigation }) => {
       </View>
 
       <View style={styles?.box}>
-        <Text style={styles?.dateText}>
-          Select Date
-        </Text>
         <TouchableOpacity
           activeOpacity={1}
-          style={[styles.datePickerViewStyle,]}
+          style={[styles.datePickerViewStyle, open && { borderColor: COLOR.black }]}
           onPress={() => {
             setOpen(!open);
           }}>
+          <Text style={[styles.dateLabelText, open && { color: COLOR.black }]}>Select Date</Text>
           <Text
-            style={[styles.datePickerStyle,]}>
+            style={[styles.datePickerStyle, open && { color: COLOR.black }]}>
             {selectedDate?.format('DD-MM-YYYY')}
           </Text>
         </TouchableOpacity>
@@ -127,7 +125,7 @@ const Dashboard = ({ navigation }) => {
         nestedScrollEnabled={true}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
-        contentContainerStyle={{ flexGrow: 1,height:'auto'}} style={{ width: '100%' }}>
+        contentContainerStyle={{ flexGrow: 1, height: 'auto' }} style={{ width: '100%' }}>
 
         <View style={styles.dataContainer}>
           {
@@ -162,7 +160,7 @@ const styles = StyleSheet.create({
 
   noDataText: { color: COLOR.textGrey, fontSize: hp(1.7), textAlign: 'center', fontFamily: FONTS.NunitoRegular, letterSpacing: wp(.1) },
   header: { width: '100%', backgroundColor: COLOR.white, paddingVertical: hp(2) },
-  box: { width: '100%', display: 'flex', flexDirection: 'column', gap: hp(1.5), backgroundColor: COLOR.white, paddingVertical: hp(1.6), paddingHorizontal: wp(2) },
+  box: { width: '100%', display: 'flex', flexDirection: 'column', gap: hp(1.5), backgroundColor: COLOR.white, paddingVertical: hp(2), paddingHorizontal: wp(2.5) },
 
   datePickerViewStyle: {
     height: hp(6.4),
@@ -183,6 +181,7 @@ const styles = StyleSheet.create({
     color: COLOR.textGrey, fontFamily: FONTS.NunitoRegular,
     fontSize: hp(1.6), textAlignVertical: 'center'
   },
+  dateLabelText:{position:'absolute',top:-hp(1.35),backgroundColor:COLOR.white,zIndex:9000,left:wp(1),paddingHorizontal:wp(1),color:COLOR.textGrey,fontFamily:FONTS.NunitoMedium,fontSize: hp(1.68),},
   dataContainer: {
     display: 'flex',
     flexDirection: 'row',

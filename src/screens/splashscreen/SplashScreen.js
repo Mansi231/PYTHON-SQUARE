@@ -1,13 +1,13 @@
 import React, { useContext, useEffect } from 'react';
-import { View, Text, StyleSheet, StatusBar, Animated, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, StyleSheet, StatusBar, Animated, ActivityIndicator, Alert, Image } from 'react-native';
 import { ROUTES } from '../../../services/routes';
 import { COLOR } from '../../utils/color';
 import { FONTS } from '../../utils/fontFamily';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from '../../../pixel';
-import LinearGradient from 'react-native-linear-gradient';
 import useAuth from '../../components/customhook/useAuth';
 import { ValContext } from '../../context/Context';
 import { getUser } from '../../asyncstorage/storage';
+import logo from '../../assets/logo.png'
 
 const SplashScreen = ({ navigation }) => {
 
@@ -45,12 +45,11 @@ const SplashScreen = ({ navigation }) => {
     );
   }
   return (
-    <LinearGradient
-      colors={['#4c669f', '#3b5998', '#192f6a']}
+    <View
       style={styles.container}>
-      <StatusBar translucent backgroundColor={'transparent'} />
-      <Text style={styles.text}>PythonSquare</Text>
-    </LinearGradient>
+      <StatusBar translucent backgroundColor={'transparent'} barStyle={'dark-content'}/>
+      <Image source={logo} style={{ height: hp(12), width: hp(12) }} resizeMode='contain' />
+    </View>
   );
 };
 
