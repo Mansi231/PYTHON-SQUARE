@@ -6,7 +6,8 @@ export const ValContext = createContext();
 
 const Context = ({ children }) => {
     const [users, setUsers] = useState([]);
-    const [loggedInUser, setLoggedInUser] = useState(null)
+    const [loggedInUser, setLoggedInUser] = useState(null);
+    const [userInvestDetail, setUserInvestDetail] = useState(null)
 
     useEffect(() => {
         const unsubscribe = getUsers();
@@ -17,8 +18,12 @@ const Context = ({ children }) => {
 
     useEffect(() => {
         const unsubscribe = getUser()
-            .then((t) => {
+            .then(async (t) => {
                 setLoggedInUser(t);
+                const userDetailRef = firestore().collection('userInvestDetail').doc(t?.uid); await userDetailRef?.onSnapshot(documentSnapshot => {
+                    setUserInvestDetail(documentSnapshot.data())
+                });
+
             })
             .catch((error) => {
                 console.error('Error fetching user type:', error);
@@ -46,7 +51,7 @@ const Context = ({ children }) => {
         return unsubscribe;
     };
 
-    return <ValContext.Provider value={{ users, setUsers ,loggedInUser, setLoggedInUser}}>{children}</ValContext.Provider>;
+    return <ValContext.Provider value={{ users, setUsers, loggedInUser, setLoggedInUser, userInvestDetail, setUserInvestDetail }}>{children}</ValContext.Provider>;
 };
 
 export default Context;

@@ -5,11 +5,11 @@ import { heightPercentageToDP as hp, widthPercentageToDP as wp } from '../../../
 import { FONTS } from '../../utils/fontFamily';
 import moment from 'moment'
 
-const YearPicker = ({ modalVisible, setModalVisible, selectedYear, setSelectedYear ,fetchUserDetails}) => {
+const YearPicker = ({ modalVisible, setModalVisible, selectedYear, setSelectedYear, fetchUserDetails }) => {
 
-    const [year,setYear] = useState(selectedYear)
+    const [year, setYear] = useState(selectedYear)
 
-    const years = Array.from({ length: 10 }, (_, index) => moment().get('year') - index);
+    const years = Array.from({ length: (moment().get('year') + 1 ) - 2023 }, (_, index) => moment().get('year') - index);
 
     const renderYearItem = ({ item }) => (
         <TouchableOpacity
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: COLOR.black40,
+        backgroundColor: COLOR.black80,
     },
     modalContent: {
         backgroundColor: COLOR.black30,

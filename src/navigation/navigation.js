@@ -21,21 +21,47 @@ import Feather from 'react-native-vector-icons/Feather'
 import Users from '../screens/users/Users';
 import AddUserInfo from '../screens/adduserdetail/AddUserInfo';
 import Home from '../screens/dashboard/Home';
+import { getUser } from '../asyncstorage/storage';
+import AddInvestDetail from '../screens/addInvestDetail/AddInvestDetail';
+import UserInvestInfo from '../screens/UserInvestInfo/UserInvestInfo';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 const DrawerScreen = ({ navigation }) => {
 
-    const routes = [
-        { name: ROUTES.ADD_USER_INFO, icon: 'edit-3', iconBorder: true, component: AddUserInfo, title: 'Add User Detail' },
+    const [routes, setRoutes] = useState([
         { name: ROUTES.USERS, icon: 'user-plus', component: Users, title: 'Users' },
-        // { name: ROUTES.ADD_USER_DETAIL, icon: 'edit-3', iconBorder: true, component: AddUserDetail, title: 'Add User Detail' },
-    ];
+        { name: ROUTES.ADD_USER_INFO, icon: 'edit-3', iconBorder: true, component: AddUserInfo, title: 'Add User Detail' },
+        { name: ROUTES.ADD_INVEST_DETAIL, icon: 'trending-up', iconBorder: true, component: AddInvestDetail, title: 'Add Invest Detail' },
+    ])
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                let user = await getUser();
+                if (user?.role === 'admin') {
+                    setRoutes([
+                        { name: ROUTES.USERS, icon: 'user-plus', component: Users, title: 'Users' },
+                        { name: ROUTES.ADD_USER_INFO, icon: 'edit-3', iconBorder: true, component: AddUserInfo, title: 'Add User Detail' },
+                        { name: ROUTES.ADD_INVEST_DETAIL, icon: 'trending-up', iconBorder: true, component: AddInvestDetail, title: 'Add Invest Detail' },
+                    ]);
+                } else {
+                    setRoutes([
+                        { name: ROUTES.USER_INVEST_INFO, icon: 'trending-up', iconBorder: true, component: UserInvestInfo, title: 'Invest Detail' },
+                        { name: ROUTES.DASHBOARD, icon: 'home', component: Home, title: 'Home' },
+                    ]);
+                }
+            } catch (error) {
+                console.error('Error fetching user:', error);
+            }
+        };
+
+        fetchData();
+    }, [navigation]);
 
     const focusEffectCallback = useCallback(() => {
         const backHandler = removeBackHandler();
-
         return () => {
             backHandler.remove();
         };
@@ -66,7 +92,7 @@ const DrawerScreen = ({ navigation }) => {
                 headerTintColor: COLOR.white,
                 headerTitleStyle: { fontFamily: FONTS.NunitoMedium, letterSpacing: wp(.2), fontSize: hp(2) },
                 headerLeft: ({ color, onPress }) => (
-                    <TouchableOpacity style={{ marginLeft: wp(3) }} onPress={() => {navigation.dispatch(DrawerActions.toggleDrawer());Keyboard.dismiss()}}>
+                    <TouchableOpacity style={{ marginLeft: wp(3) }} onPress={() => { navigation.dispatch(DrawerActions.toggleDrawer()); Keyboard.dismiss() }}>
                         <Feather name="menu" size={hp(2.3
                         )} color={COLOR.white} style={{ marginRight: wp(2) }} />
                     </TouchableOpacity>
@@ -116,11 +142,11 @@ const Navigation = ({ navigation }) => {
                     component={DrawerScreen}
                     options={{ headerShown: false }}
                 />
-                <Stack.Screen
+                {/* <Stack.Screen
                     name={ROUTES.DASHBOARD}
                     component={Home}
                     options={{ headerShown: false }}
-                />
+                /> */}
                 <Stack.Screen
                     name={ROUTES.ADD_USER}
                     component={AddUser}

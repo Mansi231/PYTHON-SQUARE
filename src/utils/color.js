@@ -3,7 +3,7 @@ export const COLOR = {
   screenBg: '#F8F8F8',
   black: '#000',
   lightBlack:'#222',
-  black40:'rgba(0,0,0,0.4)',
+  black80:'rgba(0,0,0,0.8)',
   black30:'rgba(0,0,0,0.3)',
   white: '#fff',
   offWhite:'#e8e8e8',

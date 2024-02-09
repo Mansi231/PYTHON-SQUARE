@@ -37,9 +37,9 @@ const AddUserInfo = () => {
         setShowDropdown(false)
     }
 
-    const handleAddUserInfo = async (values) => {
+    const handleAddUserInfo = async (values, { resetForm }) => {
 
-        let returnValue = calculateROI(values?.invested_amount,values?.profit_amount,values?.type)
+        let returnValue = calculateROI(values?.invested_amount, values?.profit_amount, values?.type)
 
         let year = values?.selectedDate?.get('year')
 
@@ -62,7 +62,7 @@ const AddUserInfo = () => {
                     type: values.type,
                     selectedDate: moment(values.selectedDate).format('YYYY-MM-DD'),
                     selectedUser: values.selectedUser,
-                    return:returnValue
+                    return: returnValue
                 });
             } else {
                 // If the document doesn't exist, add a new one
@@ -72,9 +72,10 @@ const AddUserInfo = () => {
                     type: values.type,
                     selectedDate: moment(values.selectedDate).format('YYYY-MM-DD'),
                     selectedUser: values.selectedUser,
-                    return:returnValue
+                    return: returnValue
                 });
             }
+            resetForm();
             Toast.show({
                 type: 'success',
                 text1: 'User detail added successfully.',
@@ -85,6 +86,7 @@ const AddUserInfo = () => {
             });
 
         } catch (error) {
+            console.log(error);
             Toast.show({
                 type: 'error',
                 text1: `Error while adding details.`,
@@ -138,7 +140,6 @@ const AddUserInfo = () => {
                                 <View style={styles.container}>
 
                                     {/* Date Picker */}
-
                                     <View style={styles?.box}>
                                         <TouchableOpacity
                                             activeOpacity={1}
@@ -163,7 +164,7 @@ const AddUserInfo = () => {
                                                 setFieldValue('selectedDate', moment(val))
                                             }}
                                             maximumDate={moment().toDate()}
-                                            // minimumDate={moment()?.toDate()}
+                                            minimumDate={moment('2023-01-01').toDate()}
                                             onCancel={() => {
                                                 setOpen(false);
                                             }}
@@ -203,6 +204,15 @@ const AddUserInfo = () => {
                                         )}
                                     </View>
 
+                                    {/* Type Dropdown */}
+
+                                    <View style={styles?.box}>
+                                        <DropdownFloating style={{ width: '100%' }} placeholder={'Select an option'} showDropdown={showDropdown} setShowDropdown={setShowDropdown} current={'type'} options={fieldsOption} onSelect={(item) => {
+                                            setFieldValue('type', item?.value)
+                                        }} value={values?.type} />
+
+                                    </View>
+
                                     {/* Profit / Loss */}
 
                                     <View style={styles?.box}>
@@ -223,14 +233,7 @@ const AddUserInfo = () => {
                                         )}
                                     </View>
 
-                                    {/* Type Dropdown */}
 
-                                    <View style={styles?.box}>
-                                        <DropdownFloating style={{ width: '100%' }} placeholder={'Select an option'} showDropdown={showDropdown} setShowDropdown={setShowDropdown} current={'type'} options={fieldsOption} onSelect={(item) => {
-                                            setFieldValue('type', item?.value)
-                                        }} value={values?.type} />
-
-                                    </View>
 
                                     {/* return percent */}
 

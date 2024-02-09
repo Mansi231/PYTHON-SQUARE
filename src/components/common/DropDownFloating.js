@@ -93,11 +93,13 @@ const DropdownFloating = ({ options, onSelect, value, style, current, showDropdo
                         indicatorStyle='black'
                     >
                         {
-                            options.map((item, index) => (
+                            (options && options?.length >0) ? options.map((item, index) => (
                                 <TouchableOpacity key={index} onPress={() => handleSelect(item)} style={[styles.option]}>
                                     <Text style={styles.optionText}>{item.label}</Text>
                                 </TouchableOpacity>
-                            ))
+                            )) : <TouchableOpacity style={[styles.option]}>
+                                <Text style={styles.optionText}>No Users Found</Text>
+                            </TouchableOpacity>
                         }
                     </ScrollView>
                 </View>

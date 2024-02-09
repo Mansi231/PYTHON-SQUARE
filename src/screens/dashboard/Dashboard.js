@@ -65,7 +65,6 @@ const Dashboard = ({ navigation }) => {
 
   const handleLogout = async () => {
     try {
-      await AsyncStorage.clear();
       await signOut();
       navigation.replace(ROUTES.LOGIN);
     } catch (error) {
@@ -80,7 +79,7 @@ const Dashboard = ({ navigation }) => {
       <StatusBar translucent backgroundColor={COLOR.blue} barStyle={'dark-content'} />
 
       <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Text style={{ color: COLOR.primaryBlue, fontSize: hp(2), fontFamily: FONTS.NunitoBold, textAlign: 'left', alignSelf: 'flex-start' }}>{loggedInUser?.email?.split('@')[0]}</Text>
+        <Text style={{ color: COLOR.primaryBlue, fontSize: hp(2), fontFamily: FONTS.NunitoBold, textAlign: 'left', alignSelf: 'flex-start' }}>{loggedInUser?.userId}</Text>
         <TouchableOpacity
           onPress={handleLogout}
           style={styles?.logoutContainer}>

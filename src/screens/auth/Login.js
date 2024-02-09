@@ -28,44 +28,26 @@ const Login = ({ navigation }) => {
     setLoading(true)
     try {
       // Sign in and get user data
-      const userCredential = await signIn(`${values.userId}@example.com`, values.password);
-      const signedInUser = userCredential.user;
+      const userCredential = await signIn(values.userId, values.password);
 
-      // Access the user's email and perform further actions
-      const userEmail = signedInUser.email;
+      if (userCredential == null) { }
+      const userId = userCredential.userId;
 
-      // Example: Check conditions based on the user's email
-      setLoggedInUser(signedInUser)
-      if (userEmail === 'admin123@example.com') {
-
-        navigation.navigate(ROUTES.DRAWER);
-      } else {
-        navigation.navigate(ROUTES.DASHBOARD);
+      setLoggedInUser(userCredential)
+      if (userId) {
+        setUser(userCredential)
       }
-      if (userEmail) {
-        setUser(signedInUser)
-      }
+      navigation.navigate(ROUTES.DRAWER);
     } catch (error) {
-      if (error?.code === 'auth/invalid-email' || error?.code === 'auth/invalid-credential') {
-        console.log('errror in user iddddd')
-        Toast.show({
-          type: 'error',
-          text1: 'Invalid Credential .',
-          visibilityTime: 3000,
-          text1Style: { fontFamily: FONTS.NunitoMedium, fontSize: hp(1.3), color: COLOR.black, letterSpacing: wp(.1) },
-          swipeable: true
-        });
 
-      }
-      else {
-        Toast.show({
-          type: 'error',
-          text1: `${error}`,
-          visibilityTime: 3000,
-          swipeable: true,
-          text1Style: { fontFamily: FONTS.NunitoMedium, fontSize: hp(1.3), color: COLOR.black, letterSpacing: wp(.1) },
-        });
-      }
+      Toast.show({
+        type: 'error',
+        text1: `${error}`,
+        visibilityTime: 3000,
+        swipeable: true,
+        text1Style: { fontFamily: FONTS.NunitoMedium, fontSize: hp(1.3), color: COLOR.black, letterSpacing: wp(.1) },
+      });
+
     } finally {
       setLoading(false)
       // resetForm()
@@ -156,9 +138,9 @@ const Login = ({ navigation }) => {
 
       <View style={styles?.bottomBox}>
         <Text style={styles.bottomLogoText}>pythonsquare</Text>
-        <Text style={styles.bottomText}>Systems Works - People Fail
-          Automated System to takes on your quantity
-          Best ALTerding to fix deposit of minimum risk with backtest result</Text>
+        <Text style={styles.bottomText}>
+          Automated system to advance returns on your Equtiy
+          Best Alternative to fix deposit at minimum risk with backtest results.</Text>
       </View>
     </SafeAreaView>
   );

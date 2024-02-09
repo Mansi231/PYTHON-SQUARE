@@ -52,15 +52,17 @@ const TextInputCommon = ({
     }
     setIsFocused(false)
   };
-
   useEffect(() => {
     if (value?.length > 0) {
       startFloating()
     }
+    else {
+      stopFloating()
+    }
   }, [value])
 
   return (
-    <View style={[styles.inputContainer, styles.commonInputStyle, { borderColor: isFocused ? COLOR.black : COLOR.borderGrey },style]}>
+    <View style={[styles.inputContainer, styles.commonInputStyle, { borderColor: isFocused ? COLOR.black : COLOR.borderGrey }, style]}>
       <View style={[styles.mainView]}>
         <View style={[styles.PhoneNumberText,]}>
           <Animated.Text
@@ -86,7 +88,7 @@ const TextInputCommon = ({
             editable={editable}
             value={value}
             onChangeText={onChangeText}
-            style={[styles.text, {  color: !isFocused && value ? COLOR.textGrey : COLOR.black }]}
+            style={[styles.text, { color: !isFocused && value ? COLOR.textGrey : COLOR.black }]}
             onFocus={() => { handleFocus(); onFocus ? onFocus() : null }}
             onBlur={() => { handleBlur(); onBlur ? onBlur() : null }}
             placeholderTextColor={placeholderTextColor}

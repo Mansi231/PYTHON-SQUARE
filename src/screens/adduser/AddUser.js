@@ -23,58 +23,51 @@ const AddUser = ({ navigation }) => {
   const handleAddUser = async (values, { resetForm }) => {
     try {
       setLoading(true);
-      const userCredential = await auth().createUserWithEmailAndPassword(`${values.userId}@example.com`, values.password);
-      const user = userCredential.user;
-
-      await firestore().collection('users').doc(user.uid).set({
-        userId: values.userId,
-        name: values.name,
-        email: user.email,
-        role: 'user'
-      });
-
-
-      Toast.show({
-        type: 'success',
-        text1: 'User added successfully',
-        visibilityTime: 3000,
-        text1Style: { fontFamily: FONTS.NunitoMedium, fontSize: hp(1.3), color: COLOR.black, letterSpacing: wp(.1) },
-        swipeable: true
-      });
-    } catch (error) {
-
-      if (error.code === 'auth/email-already-in-use') {
-        Toast.show({
-          type: 'error',
-          text1: 'User id is already in use!',
-          visibilityTime: 3000,
-          text1Style: { fontFamily: FONTS.NunitoMedium, fontSize: hp(1.3), color: COLOR.black, letterSpacing: wp(.1) },
-          swipeable: true
+      // Query Firestore to find the user
+      const userSnapshot = await firestore().collection('users').where('userId', '==', values.userId).get();
+      if (userSnapshot.empty) {
+        const newUserRef = await firestore().collection('users').add({
+          userId: values.userId,
+          name: values.name,
+          password: values?.password,
+          role: 'user'
         });
-
-      } else if (error.code === 'auth/invalid-email') {
+        const userId = newUserRef.id;
+        await newUserRef.update({ uid: userId });
+        resetForm();
         Toast.show({
-          type: 'error',
-          text1: 'User id is invalid!',
+          type: 'success',
+          text1: 'User added successfully',
           visibilityTime: 3000,
-          text1Style: { fontFamily: FONTS.NunitoMedium, fontSize: hp(1.3), color: COLOR.black, letterSpacing: wp(.1) },
-          swipeable: true
+          text1Style: { fontFamily: FONTS.NunitoMedium, fontSize: hp(1.3), color: COLOR.black, letterSpacing: wp(.1), backgroundColor: COLOR.white },
+          swipeable: true,
         });
       } else {
         Toast.show({
           type: 'error',
-          text1: `${error}`,
+          text1: 'User alredy exists !',
           visibilityTime: 3000,
-          swipeable: true,
-          text1Style: { fontFamily: FONTS.NunitoMedium, fontSize: hp(1.3), color: COLOR.black, letterSpacing: wp(.1) },
+          text1Style: { fontFamily: FONTS.NunitoMedium, fontSize: hp(1.3), color: COLOR.black, letterSpacing: wp(.1), backgroundColor: COLOR.white },
+          swipeable: true
         });
       }
+    } catch (error) {
+
+      console.log(error);
+      Toast.show({
+        type: 'error',
+        text1: `${error}`,
+        visibilityTime: 3000,
+        swipeable: true,
+        text1Style: { fontFamily: FONTS.NunitoMedium, fontSize: hp(1.3), color: COLOR.black, letterSpacing: wp(.1), backgroundColor: COLOR.white },
+      });
     } finally {
       setLoading(false);
       Keyboard.dismiss();
       // resetForm();
     }
   };
+
 
   const validationSchema = yup.object().shape({
     userId: yup.string().required('User Id is required'),
@@ -113,7 +106,7 @@ const AddUser = ({ navigation }) => {
                 onChangeText={handleChange('name')}
                 value={values.name}
                 placeholder={'Name'}
-                onBlur={()=>handleBlur('name')}
+                onBlur={() => handleBlur('name')}
                 showIcon={(isFocused) => <Feather name="edit-2" size={hp(2.2)} color={isFocused ? COLOR.black : COLOR.textGrey} style={styles.icon} />}
               />
 
@@ -129,7 +122,7 @@ const AddUser = ({ navigation }) => {
                 onChangeText={handleChange('userId')}
                 value={values.userId}
                 placeholder={'User ID'}
-                onBlur={()=>handleBlur('userId')}
+                onBlur={() => handleBlur('userId')}
                 showIcon={(isFocused) => <Feather name="user" size={hp(2.3)} color={isFocused ? COLOR.black : COLOR.textGrey} style={styles.icon} />}
               />
 
@@ -145,7 +138,7 @@ const AddUser = ({ navigation }) => {
                 onChangeText={handleChange('password')}
                 value={values.password}
                 placeholder={'Password'}
-                onBlur={()=>handleBlur('password')}
+                onBlur={() => handleBlur('password')}
                 secureTextEntry={showPassword ? true : false}
                 showIcon={(isFocused) => <TouchableOpacity onPress={() => setShowPassword(preVal => !preVal)}>
                   <Feather
@@ -156,7 +149,7 @@ const AddUser = ({ navigation }) => {
                   />
                 </TouchableOpacity>}
               />
-             
+
               {touched.password && errors.password && (
                 <Text style={styles.errorText}>{errors.password}</Text>
               )}
@@ -188,8 +181,7 @@ const styles = StyleSheet.create({
     gap: hp(4)
   },
   heading: {
-    position: 'absolute', top: hp(.8), zIndex: 1, paddingHorizontal: wp(4), right: 0, left: 0,
-    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
+    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
   },
   addUserHeading: {
     marginVertical: hp(3),

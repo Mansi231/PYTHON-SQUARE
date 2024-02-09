@@ -16,7 +16,6 @@ const CustomDrawer = (props) => {
 
     const handleLogout = async () => {
         try {
-            await AsyncStorage.clear();
             await signOut();
             props.navigation.replace(ROUTES.LOGIN);
         } catch (error) {
@@ -28,7 +27,7 @@ const CustomDrawer = (props) => {
         <View style={styles?.container}>
             <DrawerContentScrollView>
                 <View style={styles?.headerContainer}>
-                    <Text style={{ color: COLOR.black, fontSize: hp(2.2), fontFamily: FONTS.NunitoBold }}>{loggedInUser?.email?.split('@')[0]} </Text>
+                    <Text style={{ color: COLOR.black, fontSize: hp(2.2), fontFamily: FONTS.NunitoBold }}>{loggedInUser?.userId} </Text>
                 </View>
 
                 <View style={{ paddingVertical: hp(2), }}>

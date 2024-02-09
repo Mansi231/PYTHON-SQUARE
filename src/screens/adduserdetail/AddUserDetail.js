@@ -82,6 +82,8 @@ const AddUserDetail = () => {
           unrealised: values.unrealised,
         });
       }
+      resetForm();
+
       Toast.show({
         type: 'success',
         text1: 'User detail added successfully.',
@@ -102,7 +104,6 @@ const AddUserDetail = () => {
       });
     } finally {
       Keyboard.dismiss()
-      // resetForm();
       setLoading(false);
     }
   }

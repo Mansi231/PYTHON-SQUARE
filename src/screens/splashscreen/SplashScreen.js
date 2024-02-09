@@ -11,39 +11,25 @@ import logo from '../../assets/logo.png'
 
 const SplashScreen = ({ navigation }) => {
 
-  const { initializing, signIn } = useAuth();
   const { loggedInUser } = useContext(ValContext)
 
 
   useEffect(() => {
 
     const fetchData = async () => {
-      if (initializing) {
-        return;
-      }
 
       let user = await getUser();
 
       if (!user) {
         navigation.replace(ROUTES.LOGIN);
-      } else if (user?.email === 'admin123@example.com') {
-        navigation.replace(ROUTES.DRAWER);
       } else {
-        navigation.replace(ROUTES.DASHBOARD);
+        navigation.replace(ROUTES.DRAWER);
       }
     };
 
     fetchData();
-  }, [navigation, initializing]);
+  }, [navigation]);
 
-
-  if (initializing) {
-    return (
-      <View style={[styles.container, { backgroundColor: COLOR.bgLightGrey }]}>
-        <ActivityIndicator size="large" color={COLOR.lightBlack} />
-      </View>
-    );
-  }
   return (
     <View
       style={styles.container}>
