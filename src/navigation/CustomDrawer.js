@@ -12,11 +12,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const CustomDrawer = (props) => {
     const {signOut } = useAuth();
-    const { loggedInUser, setLoggedInUser } = useContext(ValContext)
+    const { loggedInUser, setLoggedInUser ,setUserInvestDetail} = useContext(ValContext)
 
     const handleLogout = async () => {
         try {
             await signOut();
+            setLoggedInUser(null);
+            setUserInvestDetail(null);
             props.navigation.replace(ROUTES.LOGIN);
         } catch (error) {
             console.error('Error signing out:', error);

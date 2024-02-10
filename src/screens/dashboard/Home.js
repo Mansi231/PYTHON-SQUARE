@@ -50,7 +50,6 @@ const Home = ({ navigation }) => {
                 await querySnapshot.forEach((doc) => {
                     const currentYear = moment().year();
                     const currentMonth = moment().month();
-
                     if (currentYear === year) {
                         userDetailsByMonth = Array.from({ length: currentMonth + 1 }, (_, i) => {
                             const month = moment().month(i).format('MMMM');
@@ -97,13 +96,13 @@ const Home = ({ navigation }) => {
 
     function formatNumber(value) {
         if (value >= 1e9) {
-            return (value / 1e9).toFixed(1) + 'B'; // Billion
+            return (value / 1e9).toFixed(2) + 'B'; // Billion
         } else if (value >= 1e7) {
-            return (value / 1e7).toFixed(1) + 'Cr'; // Crore
+            return (value / 1e7).toFixed(2) + 'Cr'; // Crore
         } else if (value >= 1e6) {
-            return (value / 1e6).toFixed(1) + 'M'; // Million
+            return (value / 1e6).toFixed(2) + 'M'; // Million
         } else if (value >= 1e3) {
-            return (value / 1e3).toFixed(1) + 'K'; // Thousand
+            return (value / 1e3).toFixed(2) + 'K'; // Thousand
         } else {
             return value.toString();
         }

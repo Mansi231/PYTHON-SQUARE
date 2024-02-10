@@ -5,7 +5,6 @@ export const keys = { USER: 'user' }
 export const setUser =async (value) =>
     await AsyncStorage.setItem(keys.USER, JSON.stringify(value))
         .then((res) => {
-            console.log(':: saved to storage ::',res);
         })
         .catch((error) => {
         });

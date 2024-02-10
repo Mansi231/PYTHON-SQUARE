@@ -23,8 +23,8 @@ const UserInvestInfo = ({ navigation }) => {
         {userInvestDetail && <View style={styles.dataContainer}>
           <View style={styles.dataCard}>
             <View style={[styles.dataCardRow]}>
-              <Text style={styles.rowTitle}>AIO</Text>
-              <Text style={styles.valueText}>{userInvestDetail?.AIO}</Text>
+              <Text style={styles.rowTitle}>AIF</Text>
+              <Text style={styles.valueText}>{userInvestDetail?.AIF}</Text>
             </View>
           </View>
           <View style={styles.dataCard}>
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     width: '100%', 
   },
   dataCard: {
-    height: 'auto', width: '48%', flexDirection: 'column',
+    height: 'auto', width: '100%', flexDirection: 'column',
     alignItems: 'center', justifyContent: 'flex-start', backgroundColor: COLOR.white,
     gap: hp(2),
     borderRadius: hp(.1),

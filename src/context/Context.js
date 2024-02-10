@@ -16,20 +16,39 @@ const Context = ({ children }) => {
         return () => unsubscribe();
     }, []);
 
+
     useEffect(() => {
         const unsubscribe = getUser()
             .then(async (t) => {
                 setLoggedInUser(t);
-                const userDetailRef = firestore().collection('userInvestDetail').doc(t?.uid); await userDetailRef?.onSnapshot(documentSnapshot => {
-                    setUserInvestDetail(documentSnapshot.data())
-                });
-
+                getUserInvestDetail(t?.uid)
             })
             .catch((error) => {
                 console.error('Error fetching user type:', error);
             });
         return () => unsubscribe();
     }, [])
+
+
+    useEffect(() => {
+        const unsubscribe = async () => {
+            if (loggedInUser?.uid) {
+                getUserInvestDetail(loggedInUser?.uid)
+            }
+        }
+        return () => unsubscribe()
+    }, [loggedInUser?.uid])
+
+    const getUserInvestDetail = (uid) => {
+        firestore().collection('userInvestDetail').doc(uid)?.onSnapshot(documentSnapshot => {
+            if (documentSnapshot.exists) {
+                setUserInvestDetail(documentSnapshot.data())
+            }
+            else {
+                setUserInvestDetail(null)
+            }
+        });
+    }
 
     const getUsers = () => {
         // Listen for real-time updates using onSnapshot
@@ -51,7 +70,7 @@ const Context = ({ children }) => {
         return unsubscribe;
     };
 
-    return <ValContext.Provider value={{ users, setUsers, loggedInUser, setLoggedInUser, userInvestDetail, setUserInvestDetail }}>{children}</ValContext.Provider>;
+    return <ValContext.Provider value={{ users, setUsers, loggedInUser, setLoggedInUser, userInvestDetail, setUserInvestDetail, getUserInvestDetail }}>{children}</ValContext.Provider>;
 };
 
 export default Context;

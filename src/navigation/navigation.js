@@ -48,8 +48,8 @@ const DrawerScreen = ({ navigation }) => {
                     ]);
                 } else {
                     setRoutes([
-                        { name: ROUTES.USER_INVEST_INFO, icon: 'trending-up', iconBorder: true, component: UserInvestInfo, title: 'Invest Detail' },
                         { name: ROUTES.DASHBOARD, icon: 'home', component: Home, title: 'Home' },
+                        { name: ROUTES.USER_INVEST_INFO, icon: 'trending-up', iconBorder: true, component: UserInvestInfo, title: 'Invest Detail' },
                     ]);
                 }
             } catch (error) {

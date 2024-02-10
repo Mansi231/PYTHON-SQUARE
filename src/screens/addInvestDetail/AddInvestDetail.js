@@ -23,7 +23,7 @@ const AddInvestDetail = () => {
     const validationSchema = yup.object().shape({
         selectedUser: yup.object().nullable().required('Please select user'),
         bonds: yup.number().nullable().required('Bond is required'),
-        AIO: yup.number().nullable().required('AIO is required'),
+        AIF: yup.number().nullable().required('AIF is required'),
         stocks: yup.number().nullable().required('Stock Amount is required'),
         return_percent: yup.object().shape({
             type: yup.string().required('Please select an option from the dropdown'),
@@ -43,7 +43,7 @@ const AddInvestDetail = () => {
             let details = {
                 selectedUser: values.selectedUser,
                 bonds: values.bonds,
-                AIO: values.AIO,
+                AIF: values.AIF,
                 stocks: values.stocks,
                 return_percent: values.return_percent,
             }
@@ -99,7 +99,7 @@ const AddInvestDetail = () => {
             </TouchableOpacity>
             <Formik
                 initialValues={{
-                    bonds: null, selectedUser: null, AIO: null, stocks: null, return_percent: { type: fieldsOption[0]?.label, value: null, label: 'ROI' }
+                    bonds: null, selectedUser: null, AIF: null, stocks: null, return_percent: { type: fieldsOption[0]?.label, value: null, label: 'ROI' }
                 }
                 }
 
@@ -137,8 +137,8 @@ const AddInvestDetail = () => {
                                         <Text style={[styles.rowTitle, { fontFamily: FONTS.NunitoBold }]}>{values?.selectedUser?.name}'s previous invest detail</Text>
                                         <View style={styles.dataCard}>
                                             <View style={[styles.dataCardRow]}>
-                                                <Text style={styles.rowTitle}>AIO</Text>
-                                                <Text style={styles.valueText}>{values?.selectedUser?.invest_detail?.AIO}</Text>
+                                                <Text style={styles.rowTitle}>AIF</Text>
+                                                <Text style={styles.valueText}>{values?.selectedUser?.invest_detail?.AIF}</Text>
                                             </View>
                                             <View style={[styles.dataCardRow]}>
                                                 <Text style={styles.rowTitle}>Bonds</Text>
@@ -180,23 +180,23 @@ const AddInvestDetail = () => {
                                     )}
                                 </View>
 
-                                {/* AIO Amount */}
+                                {/* AIF Amount */}
 
                                 <View style={styles?.box}>
                                     <TextInputCommon
                                         onFocus={onFocus}
                                         style={[{ flexGrow: 1, width: 'auto' }]}
                                         editable={true}
-                                        placeholder={'AIO'}
+                                        placeholder={'AIF'}
                                         require={true}
                                         keyboardType={'numeric'}
-                                        onChangeText={(text) => setFieldValue('AIO', text?.replace(',', ''))}
-                                        value={values?.AIO}
-                                        onBlur={() => handleBlur(`AIO`)}
+                                        onChangeText={(text) => setFieldValue('AIF', text?.replace(',', ''))}
+                                        value={values?.AIF}
+                                        onBlur={() => handleBlur(`AIF`)}
                                     />
 
-                                    {touched.AIO && errors.AIO && (
-                                        <Text style={styles.errorText}>{errors.AIO}</Text>
+                                    {touched.AIF && errors.AIF && (
+                                        <Text style={styles.errorText}>{errors.AIF}</Text>
                                     )}
                                 </View>
 

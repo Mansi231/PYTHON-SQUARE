@@ -7,7 +7,7 @@ import { heightPercentageToDP as hp, widthPercentageToDP as wp } from '../../../
 import useAuth from '../../components/customhook/useAuth';
 import { ValContext } from '../../context/Context';
 import { getUser } from '../../asyncstorage/storage';
-import logo from '../../assets/logo.png'
+import logo from '../../assets/logo1.png'
 
 const SplashScreen = ({ navigation }) => {
 
@@ -34,7 +34,7 @@ const SplashScreen = ({ navigation }) => {
     <View
       style={styles.container}>
       <StatusBar translucent backgroundColor={'transparent'} barStyle={'dark-content'}/>
-      <Image source={logo} style={{ height: hp(12), width: hp(12) }} resizeMode='contain' />
+      <Image source={logo} style={{ height: hp(18), width: hp(18) }} resizeMode='contain' />
     </View>
   );
 };

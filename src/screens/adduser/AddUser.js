@@ -24,12 +24,12 @@ const AddUser = ({ navigation }) => {
     try {
       setLoading(true);
       // Query Firestore to find the user
-      const userSnapshot = await firestore().collection('users').where('userId', '==', values.userId).get();
+      const userSnapshot = await firestore().collection('users').where('userId', '==', values.userId?.trim()).get();
       if (userSnapshot.empty) {
         const newUserRef = await firestore().collection('users').add({
-          userId: values.userId,
-          name: values.name,
-          password: values?.password,
+          userId: values.userId?.trim(),
+          name: values.name?.trim(),
+          password: values?.password?.trim(),
           role: 'user'
         });
         const userId = newUserRef.id;

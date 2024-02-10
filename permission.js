@@ -8,7 +8,6 @@ export const androidCameraPermission = () => new Promise(async (resolve, reject)
                 PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
                 PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE
             ]);
-            // console.log(granted, 'granted response')
             console.log(PermissionsAndroid.RESULTS.GRANTED, granted['android.permission.WRITE_EXTERNAL_STORAGE'])
             if (
                 granted['android.permission.CAMERA'] !== PermissionsAndroid.RESULTS.GRANTED ||
